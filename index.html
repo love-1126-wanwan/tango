@@ -48,7 +48,35 @@ h2{font-size:1rem;margin:0 0 10px}
 
 nav{position:fixed;left:0;right:0;bottom:0;background:var(--paper);border-top:1px solid var(--line);
   padding-bottom:env(safe-area-inset-bottom,0px);z-index:10}
-nav .inner{max-width:480px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+nav .inner{max-width:480px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr)}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:3px;margin:4px 0 14px}
+.seg button{border:0;background:none;border-radius:9px;padding:9px 0;font-weight:700;font-size:.9rem;color:var(--sub)}
+.seg button[aria-pressed="true"]{background:var(--blue);color:var(--on-blue)}
+.dict{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px}
+.dict .sent{font-family:var(--en);font-size:1.25rem;line-height:2.4;margin:4px 0 10px;word-break:break-word}
+.blank{font-family:var(--en);font-size:1.05rem;border:0;border-bottom:2px solid var(--blue);background:var(--marker);color:var(--marker-ink);border-radius:4px 4px 0 0;padding:2px 6px;margin:0 2px;min-width:3.5em;max-width:100%}
+.blank.ok{border-bottom-color:var(--ok);background:var(--ok-soft);color:var(--ok)}
+.blank.ng{border-bottom-color:var(--danger);background:transparent;color:var(--danger);text-decoration:line-through}
+.ans{font-family:var(--en);font-weight:700;color:var(--ok);margin-left:2px}
+.dict .ja{color:var(--sub);font-size:.9rem;margin:0 0 12px}
+.dict .res{font-weight:700;margin:6px 0 10px}
+.dict .res.good{color:var(--ok)} .dict .res.bad{color:var(--danger)}
+.dsrc{margin:0 0 12px}
+.stats{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.stats span{font-size:.75rem;background:var(--bg);border-radius:999px;padding:3px 9px;color:var(--sub)}
+.presets{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.phr{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:10px}
+.phr li{background:var(--bg);border-radius:12px;padding:12px}
+.phr .en{font-family:var(--en);font-size:1.08rem;line-height:1.9;margin:0}
+.phr .rd{color:var(--blue);font-weight:700;margin:2px 0}
+.phr .ja{color:var(--sub);font-size:.88rem;margin:0 0 6px}
+.phr .tp{font-size:.8rem;color:var(--sub);margin:4px 0 0;line-height:1.6}
+.phr mark{background:linear-gradient(transparent 38%,var(--marker) 38%,var(--marker) 92%,transparent 92%);color:var(--marker-ink);padding:0 2px}
+.setlist{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.setlist li{background:var(--paper);border:1px solid var(--line);border-radius:12px;display:flex;align-items:center;gap:8px;padding:10px 12px}
+.setlist .nm{flex:1;min-width:0}
+.setlist .nm b{display:block}
+.setlist .nm span{font-size:.8rem;color:var(--sub)}
 nav button{border:0;background:none;padding:10px 0 12px;font-size:.74rem;color:var(--sub);display:flex;flex-direction:column;align-items:center;gap:3px}
 nav button svg{width:22px;height:22px}
 nav button[aria-current="page"]{color:var(--blue);font-weight:700}
@@ -203,6 +231,8 @@ details[open] .lw span{white-space:normal}
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg>さがす</button>
   <button type="button" data-tab="mine">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg>単語帳</button>
+  <button type="button" data-tab="practice">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13 7l4 4"/></svg>練習</button>
   <button type="button" data-tab="settings">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>設定</button>
 </div></nav>
@@ -253,7 +283,7 @@ const WORD_DATA = [
 ["milk","名詞","牛乳","mɪlk","I drink milk every day.","毎日牛乳を飲みます。","アイドゥリンクミォケヴリデイ",[["milk every","ミォケヴリ","L"]],"jhs1",""],
 ["tea","名詞","お茶、紅茶","tiː","Would you like some tea?","お茶はいかがですか?","ウッジュライクサムティー",[["Would you","ウッジュ","Y"]],"jhs1",""],
 ["coffee","名詞","コーヒー","ˈkɑːfi","I need a cup of coffee.","コーヒーが1杯ほしい。","アイニーダカッパカーフィー",[["need a","ニーダ","L"],["cup of","カッパ","W"]],"jhs1",""],
-["music","名詞","音楽","ˈmjuːzɪk","I listen to music.","音楽を聞きます。","アイリスンタミューズィック",[["listen to","リスンタ","W"]],"jhs1",""],
+["music","名詞","音楽","ˈmjuːzɪk","I listen to music.","音楽を聞きます。","アイリスンヌミューズィック",[["listen to","リスンヌ","W"]],"jhs1",""],
 ["sport","名詞","スポーツ","spɔːrt","What sport do you like?","何のスポーツが好き?","ワッスポーッダヤライク",[["What sport","ワッスポーッ","D"],["do you","ダヤ","W"]],"jhs1",""],
 ["soccer","名詞","サッカー","ˈsɑːkɚ","We play soccer after school.","放課後サッカーをします。","ウィプレイサーカラフタースクーゥ",[["soccer after","サーカラフター","L"]],"jhs1",""],
 ["tennis","名詞","テニス","ˈtenɪs","I play tennis on Sunday.","日曜日にテニスをします。","アイプレイテニソンサンデイ",[["tennis on","テニソン","L"]],"jhs1",""],
@@ -268,10 +298,10 @@ const WORD_DATA = [
 ["door","名詞","ドア","dɔːr","Shut the door.","ドアを閉めて。","シャッザドーア",[["Shut the","シャッザ","D"]],"jhs1",""],
 ["window","名詞","窓","ˈwɪndoʊ","Look out the window.","窓の外を見て。","ルッカウッザウィンドウ",[["Look out","ルッカウッ","L"]],"jhs1",""],
 ["table","名詞","テーブル","ˈteɪbəl","Put it on the table.","テーブルに置いて。","プリロンザテイボー",[["Put it on","プリロン","F"]],"jhs1",""],
-["bed","名詞","ベッド","bed","I go to bed at ten.","10時に寝ます。","アイゴウタベッダッテン",[["go to","ゴウタ","W"],["bed at","ベッダッ","L"]],"jhs1",""],
+["bed","名詞","ベッド","bed","I go to bed at ten.","10時に寝ます。","アイゴウラベッダッテン",[["go to","ゴウラ","F"],["bed at","ベッダッ","L"]],"jhs1",""],
 ["money","名詞","お金","ˈmʌni","I don't have any money.","お金を全然持っていない。","アイドンハヴェニマニー",[["don't","ドン","N"],["have any","ハヴェニ","L"]],"jhs1",""],
 ["shop","名詞","店","ʃɑːp","This shop is open.","この店は開いている。","ディスシャッピゾウプン",[["shop is open","シャッピゾウプン","L"]],"jhs1",""],
-["park","名詞","公園","pɑːrk","Let's go to the park.","公園に行こう。","レッツゴウタザパーク",[["go to the","ゴウタザ","W"]],"jhs1",""],
+["park","名詞","公園","pɑːrk","Let's go to the park.","公園に行こう。","レッツゴウラザパーク",[["go to the","ゴウラザ","F"]],"jhs1",""],
 ["library","名詞","図書館","ˈlaɪbreri","I study at the library.","図書館で勉強します。","アイスタディアッザライブレリー",[["study at the","スタディアッザ","L"]],"jhs1",""],
 ["station","名詞","駅","ˈsteɪʃən","Where is the station?","駅はどこですか?","ウェアリズザステイシュン",[["Where is the","ウェアリズザ","L"]],"jhs1",""],
 ["hospital","名詞","病院","ˈhɑːspɪt̬əl","He is in the hospital.","彼は入院している。","ヒーズィンザハスピロー",[["He is in","ヒーズィン","L"],["hospital","ハスピロー","F"]],"jhs1",""],
@@ -309,7 +339,7 @@ const WORD_DATA = [
 ["word","名詞","単語、言葉","wɝːd","What does this word mean?","この単語はどういう意味?","ワッダズディスワーミーン",[["What does","ワッダズ","D"],["word mean","ワーミーン","D"]],"jhs1",""],
 ["English","名詞・形容詞","英語、英語の","ˈɪŋɡlɪʃ","I study English every day.","毎日英語を勉強します。","アイスタディイングリッシェヴリデイ",[["English every","イングリッシェヴリ","L"]],"jhs1",""],
 ["class","名詞","授業、クラス","klæs","Our class is fun.","私たちのクラスは楽しい。","アウアクレァスィズファン",[["class is","クレァスィズ","L"]],"jhs1",""],
-["go","動詞","行く","ɡoʊ","I go to school by bus.","バスで通学します。","アイゴウタスクーゥバイバス",[["go to","ゴウタ","W"]],"jhs1",""],
+["go","動詞","行く","ɡoʊ","I go to school by bus.","バスで通学します。","アイゴウラスクーゥバイバス",[["go to","ゴウラ","F"]],"jhs1",""],
 ["come","動詞","来る","kʌm","Come on in!","さあ入って!","カモニン",[["Come on in","カモニン","L"]],"jhs1",""],
 ["get","動詞","手に入れる、〜になる","ɡet","Let's get a drink.","飲み物を買おう。","レッツゲラドゥリンク",[["get a","ゲラ","F"]],"jhs1",""],
 ["get up","熟語","起きる","ɡet̬ ˈʌp","I get up at six.","6時に起きます。","アイゲラッパッスィックス",[["get up at","ゲラッパッ","F"]],"jhs1",""],
@@ -324,7 +354,7 @@ const WORD_DATA = [
 ["see","動詞","見る、会う","siː","See you later.","またあとでね。","スィーヤレイラー",[["See you","スィーヤ","W"],["later","レイラー","F"]],"jhs1",""],
 ["look at","熟語","〜を見る","ˈlʊk ət","Look at this!","これ見て!","ルッカッディス",[["Look at this","ルッカッディス","L"]],"jhs1",""],
 ["watch","動詞・名詞","(じっと)見る、腕時計","wɑːtʃ","I watch TV at night.","夜テレビを見ます。","アイワッチティーヴィーアッナイ",[["at night","アッナイ","D"]],"jhs1",""],
-["listen to","熟語","〜を聞く","ˈlɪsən tə","Listen to me.","私の話を聞いて。","リスンタミー",[["Listen to","リスンタ","W"]],"jhs1",""],
+["listen to","熟語","〜を聞く","ˈlɪsən tə","Listen to me.","私の話を聞いて。","リスンヌミー",[["Listen to","リスンヌ","W"]],"jhs1",""],
 ["hear","動詞","聞こえる","hɪr","Can you hear me?","聞こえますか?","キャニューヒアミー",[["Can you","キャニュー","L"]],"jhs1",""],
 ["read","動詞","読む","riːd","I read a book every night.","毎晩本を読みます。","アイリーダブッケヴリナイ",[["read a","リーダ","L"],["book every","ブッケヴリ","L"]],"jhs1",""],
 ["write","動詞","書く","raɪt","Write it down.","書きとめて。","ライリッダウン",[["Write it down","ライリッダウン","F"]],"jhs1",""],
@@ -473,7 +503,7 @@ const WORD_DATA = [
 ["fish","名詞・動詞","魚、釣りをする","fɪʃ","I like fish and rice.","魚とご飯が好き。","アイライクフィッシャンライス",[["fish and","フィッシャン","W"]],"jhs1",""],
 ["horse","名詞","馬","hɔːrs","Can you ride a horse?","馬に乗れる?","キャニューライダホース",[["Can you","キャニュー","L"],["ride a","ライダ","L"]],"jhs1",""],
 ["animal","名詞","動物","ˈænəməl","What animal do you like?","何の動物が好き?","ワレァナモーダヤライク",[["What animal","ワレァナモー","F"],["do you","ダヤ","W"]],"jhs1",""],
-["zoo","名詞","動物園","zuː","Let's go to the zoo.","動物園に行こう。","レッツゴウタザズー",[["go to the","ゴウタザ","W"]],"jhs1",""],
+["zoo","名詞","動物園","zuː","Let's go to the zoo.","動物園に行こう。","レッツゴウラザズー",[["go to the","ゴウラザ","F"]],"jhs1",""],
 ["bread","名詞","パン","bred","I eat bread for breakfast.","朝食にパンを食べる。","アイイーッブレッファブレックファスッ",[["eat bread","イーッブレッ","D"],["for breakfast","ファブレックファスッ","W"]],"jhs1",""],
 ["rice","名詞","ご飯、米","raɪs","Do you want more rice?","ご飯おかわりする?","ダヤワンモアライス",[["Do you","ダヤ","W"],["want more","ワンモア","N"]],"jhs1",""],
 ["egg","名詞","卵","eɡ","I had an egg for breakfast.","朝食に卵を食べた。","アイハダネッグファブレックファスッ",[["had an egg","ハダネッグ","L"]],"jhs1",""],
@@ -548,7 +578,7 @@ const WORD_DATA = [
 ["leg","名詞","脚","leɡ","I hurt my leg.","脚をけがした。","アイハーッマイレッグ",[["hurt my","ハーッマイ","D"]],"jhs1",""],
 ["foot","名詞","足(足首から下)","fʊt","I go to school on foot.","歩いて通学します。","アイゴウタスクーロンフッ",[["school on","スクーロン","L"]],"jhs1",""],
 ["place","名詞","場所","pleɪs","This is a nice place.","ここはいい場所だ。","ディスィザナイスプレイス",[["This is a","ディスィザ","L"]],"jhs1",""],
-["way","名詞","道、方法","weɪ","Is this the way to the station?","駅へはこの道ですか?","イズディスザウェイタザステイシャン",[["way to the","ウェイタザ","W"]],"jhs1",""],
+["way","名詞","道、方法","weɪ","Is this the way to the station?","駅へはこの道ですか?","イズディスザウェイラザステイシャン",[["way to the","ウェイラザ","F"]],"jhs1",""],
 ["thing","名詞","もの、こと","θɪŋ","That's a good thing.","それはいいことだ。","ザッツァグッスィング",[["That's a","ザッツァ","L"],["good thing","グッスィング","D"]],"jhs1",""],
 ["something","代名詞","何か","ˈsʌmθɪŋ","I want something to drink.","何か飲み物がほしい。","アイワンサムスィンタジュリンク",[["want something","ワンサムスィン","N"],["to drink","タジュリンク","W"]],"jhs1",""],
 ["anything","代名詞","何か、何も","ˈeniθɪŋ","Do you need anything?","何か必要?","ダユニーデニスィン",[["need anything","ニーデニスィン","L"]],"jhs1",""],
@@ -565,7 +595,7 @@ const WORD_DATA = [
 ["cry","動詞","泣く","kraɪ","Don't cry.","泣かないで。","ドンクライ",[["Don't cry","ドンクライ","N"]],"jhs1",""],
 ["cut","動詞","切る","kʌt","Cut it in half.","半分に切って。","カリリンヘァフ",[["Cut it in","カリリン","F"]],"jhs1",""],
 ["draw","動詞","描く","drɔː","Can you draw a cat?","ねこを描ける?","キャニュージュローアキャッ",[["draw a","ジュローア","L"]],"jhs1",""],
-["drive","動詞","運転する","draɪv","My mom drives me to school.","母が学校まで車で送ってくれる。","マイマームジュライヴズミータスクーォ",[["me to","ミータ","W"]],"jhs1",""],
+["drive","動詞","運転する","draɪv","My mom drives me to school.","母が学校まで車で送ってくれる。","マイマームジュライヴズミーラスクーォ",[["me to","ミーラ","F"]],"jhs1",""],
 ["enjoy","動詞","楽しむ","ɪnˈdʒɔɪ","Enjoy your meal.","食事を楽しんで。","インジョイユアミーォ",[["Enjoy your","インジョイユア","L"]],"jhs1",""],
 ["finish","動詞","終える","ˈfɪnɪʃ","Did you finish your homework?","宿題は終わった?","ディジュフィニシュアホウムワーク",[["Did you","ディジュ","Y"],["finish your","フィニシュア","Y"]],"jhs1",""],
 ["fly","動詞","飛ぶ","flaɪ","Birds can fly.","鳥は飛べる。","バーズクンフライ",[["can fly","クンフライ","W"]],"jhs1",""],
@@ -606,7 +636,7 @@ const WORD_DATA = [
 ["jump","動詞","跳ぶ","dʒʌmp","Can you jump high?","高く跳べる?","キャニュージャンプハイ",[["Can you","キャニュー","L"]],"jhs1",""],
 ["mean","動詞","意味する","miːn","What do you mean?","どういう意味?","ワッダヤミーン",[["What do you","ワッダヤ","D"]],"jhs1",""],
 ["miss","動詞","のがす、さみしく思う","mɪs","I miss you.","あなたがいなくてさみしい。","アイミシュー",[["miss you","ミシュー","Y"]],"jhs2",""],
-["order","動詞・名詞","注文する、注文","ˈɔːrdɚ","Are you ready to order?","ご注文はお決まりですか?","アーヤレディタオーダー",[["ready to order","レディタオーダー","W"]],"jhs2 t500",""],
+["order","動詞・名詞","注文する、注文","ˈɔːrdɚ","Are you ready to order?","ご注文はお決まりですか?","アーヤレディラオーダー",[["ready to order","レディラオーダー","F"]],"jhs2 t500",""],
 ["pass","動詞","手渡す、合格する","pæs","I passed the test!","テストに合格した!","アイペァスッザテスッ",[["passed the","ペァスッザ","D"]],"jhs2",""],
 ["pull","動詞","引く","pʊl","Pull it hard.","強く引いて。","プリッハーッ",[["Pull it","プリッ","L"]],"jhs1",""],
 ["push","動詞","押す","pʊʃ","Push it.","押して。","プシッ",[["Push it","プシッ","L"]],"jhs1",""],
@@ -723,7 +753,7 @@ const WORD_DATA = [
 ["environment","名詞","環境","ɪnˈvaɪrənmənt","We should protect the environment.","環境を守るべきだ。","ウィシュッブラテクッジインヴァイランメン",[["should protect","シュップラテクッ","D"]],"jhs3 t500",""],
 ["event","名詞","行事、出来事","ɪˈvent","The event starts at six.","そのイベントは6時に始まる。","ジイヴェンスターツアッスィックス",[["event starts","イヴェンスターツ","N"]],"jhs2 t500",""],
 ["experience","名詞・動詞","経験、経験する","ɪkˈspɪriəns","It was a good experience.","いい経験だった。","イッワザグッディクスピリアンス",[["was a","ワザ","L"],["good experience","グッディクスピリアンス","L"]],"jhs2 t500",""],
-["festival","名詞","祭り","ˈfestəvəl","Let's go to the summer festival.","夏祭りに行こう。","レッツゴウタザサマーフェスタヴォー",[["go to the","ゴウタザ","W"]],"jhs2",""],
+["festival","名詞","祭り","ˈfestəvəl","Let's go to the summer festival.","夏祭りに行こう。","レッツゴウラザサマーフェスタヴォー",[["go to the","ゴウラザ","F"]],"jhs2",""],
 ["field","名詞","野原、分野、競技場","fiːld","The kids are playing in the field.","子どもたちが野原で遊んでいる。","ザキッザープレイインギンザフィーォッ",[["kids are","キッザー","L"],["playing in the","プレイインギンザ","L"]],"jhs2",""],
 ["fire","名詞","火、火事","ˈfaɪɚ","There was a big fire last night.","昨夜大きな火事があった。","ゼアワザビッグファイアーレァスナイッ",[["was a","ワザ","L"],["last night","レァスナイッ","D"]],"jhs2",""],
 ["floor","名詞","床、階","flɔːr","The office is on the third floor.","事務所は3階にある。","ジアーフィスィゾンザサーッフロー",[["office is on the","アーフィスィゾンザ","L"]],"jhs2 t500",""],
@@ -1013,7 +1043,7 @@ const WORD_DATA = [
 ["company","名詞","会社","ˈkʌmpəni","She works for a big company.","彼女は大きな会社で働いている。","シーワークスファラビッグカンパニー",[["for a","ファラ","L"]],"jhs2 t500",""],
 ["supermarket","名詞","スーパーマーケット","ˈsuːpɚmɑːrkɪt","I went to the supermarket.","スーパーに行った。","アイウェンタザスーパーマーキッ",[["went to the","ウェンタザ","N"]],"jhs1",""],
 ["post office","名詞","郵便局","ˈpoʊst ˌɑːfɪs","Where is the post office?","郵便局はどこ?","ウェアリズザポウスターフィス",[["post office","ポウスターフィス","L"]],"jhs1 t500",""],
-["museum","名詞","博物館、美術館","mjuˈziːəm","Let's go to the museum.","博物館に行こう。","レッツゴウタザミューズィーアム",[["go to the","ゴウタザ","W"]],"jhs2",""],
+["museum","名詞","博物館、美術館","mjuˈziːəm","Let's go to the museum.","博物館に行こう。","レッツゴウラザミューズィーアム",[["go to the","ゴウラザ","F"]],"jhs2",""],
 ["stadium","名詞","競技場","ˈsteɪdiəm","We met at the stadium.","競技場で会った。","ウィメラッザステイディアム",[["met at the","メラッザ","F"]],"jhs2",""],
 ["pool","名詞","プール","puːl","Let's swim in the pool.","プールで泳ごう。","レッツスウィミンザプーォ",[["swim in the","スウィミンザ","L"]],"jhs1",""],
 ["theater","名詞","劇場、映画館","ˈθiːət̬ɚ","We went to the theater.","劇場に行った。","ウィウェンタザスィーアラー",[["went to the","ウェンタザ","N"]],"jhs2",""],
@@ -1102,7 +1132,7 @@ const WORD_DATA = [
 ["kick","動詞","蹴る","kɪk","Kick it hard.","強く蹴って。","キッキッハーッ",[["Kick it","キッキッ","L"]],"jhs2",""],
 ["knock","動詞","ノックする","nɑːk","Knock on the door.","ドアをノックして。","ナーコンザドー",[["Knock on the","ナーコンザ","L"]],"jhs2",""],
 ["lead","動詞","導く","liːd","She will lead the team.","彼女がチームを率いる。","シーウィォリーッザティーム",[["lead the","リーッザ","D"]],"jhs3 t500",""],
-["lie","動詞・名詞","うそをつく、横になる、うそ","laɪ","Don't lie to me.","うそをつかないで。","ドンライタミー",[["lie to me","ライタミー","W"]],"jhs2",""],
+["lie","動詞・名詞","うそをつく、横になる、うそ","laɪ","Don't lie to me.","うそをつかないで。","ドンライラミー",[["lie to me","ライラミー","F"]],"jhs2",""],
 ["lift","動詞","持ち上げる","lɪft","Can you lift this box?","この箱持ち上げられる?","キャニューリフッディスバークス",[["lift this","リフッディス","D"]],"jhs3",""],
 ["lock","動詞・名詞","鍵をかける、錠","lɑːk","Did you lock the door?","ドアに鍵をかけた?","ディジュラークザドー",[["Did you","ディジュ","Y"]],"jhs2",""],
 ["mix","動詞","混ぜる","mɪks","Mix it well.","よく混ぜて。","ミクスィッウェォ",[["Mix it","ミクスィッ","L"]],"jhs2",""],
@@ -1221,7 +1251,7 @@ const WORD_DATA = [
 ["right away","熟語","すぐに","ˌraɪt̬ əˈweɪ","I'll do it right away.","すぐにやるよ。","アイォドゥーイッライラウェイ",[["right away","ライラウェイ","F"]],"jhs3 id1 t500",""],
 ["for the first time","熟語","初めて","fɚ ðə ˈfɝːst ˌtaɪm","I saw snow for the first time.","初めて雪を見た。","アイソースノウファザファースタイム",[["first time","ファースタイム","G"]],"jhs2 id1",""],
 ["for a long time","熟語","長い間","fɚr ə ˈlɔːŋ ˌtaɪm","I haven't seen you for a long time.","久しぶりだね。","アイヘァヴンスィーニュファラローングタイム",[["seen you","スィーニュ","L"],["for a long time","ファラローングタイム","L"]],"jhs2 id1",""],
-["go to bed","熟語","寝る","ˌɡoʊ tə ˈbed","It's time to go to bed.","もう寝る時間だ。","イッツタイムタゴウタベッ",[["go to bed","ゴウタベッ","W"]],"jhs1 id1",""],
+["go to bed","熟語","寝る","ˌɡoʊ tə ˈbed","It's time to go to bed.","もう寝る時間だ。","イッツタイムタゴウラベッ",[["go to bed","ゴウラベッ","F"]],"jhs1 id1",""],
 ["have a good time","熟語","楽しい時を過ごす","ˌhæv ə ˈɡʊd ˌtaɪm","Have a good time!","楽しんでね!","ハヴァグッタイム",[["Have a good time","ハヴァグッタイム","G"]],"jhs2 id1",""],
 ["make friends","熟語","友だちになる","ˌmeɪk ˈfrendz","I want to make friends with her.","彼女と友だちになりたい。","アイワナメイクフレンズウィザー",[["with her","ウィザー","H"]],"jhs2 id1",""],
 ["stay up","熟語","夜ふかしする","ˌsteɪ ˈʌp","Don't stay up too late.","夜ふかししすぎないで。","ドンステイアップトゥーレイッ",[["stay up","ステイアップ","L"]],"jhs3 id1",""],
@@ -1337,7 +1367,7 @@ const WORD_DATA = [
 ["program","名詞","番組、計画","ˈproʊɡræm","What's your favorite TV program?","好きなテレビ番組は?","ワッチュアフェイヴァリッティーヴィープロウグレァム",[["What's your","ワッチュア","Y"]],"jhs2 t500",""],
 ["purpose","名詞","目的","ˈpɝːpəs","What's the purpose of your visit?","訪問の目的は?","ワッツザパーパサヴユアヴィズィッ",[["purpose of your","パーパサヴユア","L"]],"jhs3 t500",""],
 ["quiz","名詞","小テスト、クイズ","kwɪz","We have a quiz today.","今日小テストがある。","ウィハヴァクウィズタデイ",[["have a","ハヴァ","L"]],"jhs2",""],
-["radio","名詞","ラジオ","ˈreɪdioʊ","I listen to the radio.","ラジオを聞く。","アイリサンタザレイディオウ",[["listen to the","リサンタザ","W"]],"jhs1",""],
+["radio","名詞","ラジオ","ˈreɪdioʊ","I listen to the radio.","ラジオを聞く。","アイリサンヌザレイディオウ",[["listen to the","リサンヌザ","W"]],"jhs1",""],
 ["research","名詞・動詞","研究、研究する","ˈriːsɝːtʃ","She does research on animals.","彼女は動物の研究をしている。","シーダズリーサーチョネァナモーズ",[["research on animals","リーサーチョネァナモーズ","L"]],"jhs3 t500",""],
 ["restroom","名詞","トイレ","ˈrestruːm","Where's the restroom?","トイレはどこですか?","ウェアズザレスルーム",[["Where's the","ウェアズザ","H"]],"jhs2 t500","レスルーム"],
 ["role","名詞","役割","roʊl","She played an important role.","彼女は重要な役割を果たした。","シープレイダニンポータンロウォ",[["played an important","プレイダニンポータン","L"]],"jhs3 t500",""],
@@ -1379,13 +1409,13 @@ const WORD_DATA = [
 ["weight","名詞","重さ、体重","weɪt","I want to lose weight.","体重を減らしたい。","アイワナルーズウェイッ",[["want to","ワナ","N"]],"jhs3",""],
 ["wood","名詞","木材","wʊd","This table is made of wood.","このテーブルは木でできている。","ディステイボーイズメイダヴウッ",[["made of wood","メイダヴウッ","L"]],"jhs3",""],
 ["worker","名詞","働く人","ˈwɝːkɚ","He is a hard worker.","彼は働き者だ。","ヒーザハーッワーカー",[["He is a","ヒーザ","L"],["hard worker","ハーッワーカー","D"]],"jhs3 t500",""],
-["zero","名詞","ゼロ","ˈzɪroʊ","The score was three to zero.","スコアは3対0だった。","ザスコーワズスリータズィロウ",[["three to","スリータ","W"]],"jhs2",""],
+["zero","名詞","ゼロ","ˈzɪroʊ","The score was three to zero.","スコアは3対0だった。","ザスコーワズスリーラズィロウ",[["three to","スリーラ","F"]],"jhs2",""],
 ["accept","動詞","受け入れる","əkˈsept","I accepted his offer.","彼の申し出を受け入れた。","アイアクセプティディズオーファー",[["accepted his offer","アクセプティディゾーファー","H"]],"jhs3 t500",""],
 ["achieve","動詞","達成する","əˈtʃiːv","You can achieve your goal.","目標は達成できるよ。","ユークンナチーヴュアゴウォ",[["can achieve your","クンナチーヴュア","L"]],"jhs3 t500",""],
 ["announce","動詞","発表する","əˈnaʊns","They announced the winner.","勝者が発表された。","ゼイアナウンスッザウィナー",[["announced the","アナウンスッザ","D"]],"jhs3 t500",""],
 ["apologize","動詞","謝る","əˈpɑːlədʒaɪz","I apologize for being late.","遅れてすみません。","アイアパーラジャイズファビーインレイッ",[["apologize for","アパーラジャイズファ","W"]],"jhs3 t500",""],
 ["argue","動詞","言い争う","ˈɑːrɡjuː","Don't argue with me.","私と言い争わないで。","ドンアーギューウィズミー",[["Don't argue","ドンアーギュー","N"]],"jhs3",""],
-["avoid","動詞","避ける","əˈvɔɪd","Try to avoid sugar.","砂糖を避けるようにして。","チュライタアヴォイッシュガー",[["Try to avoid","チュライタアヴォイッ","W"]],"jhs3 t500",""],
+["avoid","動詞","避ける","əˈvɔɪd","Try to avoid sugar.","砂糖を避けるようにして。","チュライラアヴォイッシュガー",[["Try to avoid","チュライラアヴォイッ","F"]],"jhs3 t500",""],
 ["beat","動詞","打ち負かす","biːt","We beat them three to one.","3対1で勝った。","ウィビーッゼムスリータワン",[["beat them","ビーッゼム","D"]],"jhs3",""],
 ["bite","動詞","かむ","baɪt","The dog bit me.","犬にかまれた。","ザダーグビッミー",[["bit me","ビッミー","D"]],"jhs3",""],
 ["bow","動詞","おじぎをする","baʊ","Japanese people often bow.","日本人はよくおじぎをする。","ジャパニーズピーポーオーファンバウ",[["people often","ピーポーオーファン","L"]],"jhs3",""],
@@ -1434,7 +1464,7 @@ const WORD_DATA = [
 ["recommend","動詞","すすめる","ˌrekəˈmend","What do you recommend?","おすすめは何ですか?","ワッダユレカメン",[["What do you","ワッダユ","D"]],"jhs3 t500",""],
 ["record","動詞・名詞","記録する、録音する、記録","rɪˈkɔːrd","I recorded the song.","その歌を録音した。","アイリコーディッザソーング",[["recorded the","リコーディッザ","D"]],"jhs3 t500",""],
 ["refuse","動詞","断る","rɪˈfjuːz","He refused to help.","彼は手伝うのを断った。","ヒーリフューズッタヘォプ",[["refused to","リフューズッタ","G"]],"jhs3",""],
-["reply","動詞・名詞","返事をする、返事","rɪˈplaɪ","Please reply to my email.","メールに返事をください。","プリーズリプライタマイイーメイォ",[["reply to my","リプライタマイ","W"]],"jhs3 t500",""],
+["reply","動詞・名詞","返事をする、返事","rɪˈplaɪ","Please reply to my email.","メールに返事をください。","プリーズリプライラマイイーメイォ",[["reply to my","リプライラマイ","F"]],"jhs3 t500",""],
 ["rush","動詞","急ぐ","rʌʃ","We rushed to the station.","駅に急いだ。","ウィラシュッタザステイシャン",[["rushed to the","ラシュッタザ","G"]],"jhs3",""],
 ["separate","動詞・形容詞","分ける、別々の","ˈsepəreɪt","Separate the trash.","ごみを分別して。","セパレイッザチュレァッシュ",[["Separate the","セパレイッザ","D"]],"jhs3",""],
 ["serve","動詞","(料理を)出す、仕える","sɝːv","Dinner is served.","夕食の準備ができました。","ディナリズサーヴッ",[["Dinner is","ディナリズ","L"]],"jhs3 t500",""],
@@ -1577,7 +1607,7 @@ const WORD_DATA = [
 ["one day","熟語","ある日","ˈwʌn ˌdeɪ","One day, I met a cat.","ある日、1匹のねこに会った。","ワンデイ、アイメラキャッ",[["met a cat","メラキャッ","F"]],"jhs2 id1",""],
 ["out of","熟語","〜から外へ","ˈaʊt əv","Get out of here.","ここから出ていって。","ゲラウラヴヒア",[["Get out of","ゲラウラヴ","F"]],"jhs3 id1","アウラヴ"],
 ["run out of","熟語","〜を使い果たす","ˌrʌn ˈaʊt əv","We ran out of milk.","牛乳を切らした。","ウィレァナウラヴミォク",[["ran out of","レァナウラヴ","F"]],"jhs3 id1 t500","ラナウラヴ"],
-["say hello to","熟語","〜によろしく伝える","ˌseɪ həˈloʊ tə","Say hello to your mom.","お母さんによろしくね。","セイハロウタユアマーム",[["hello to your","ハロウタユア","W"]],"jhs2 id1",""],
+["say hello to","熟語","〜によろしく伝える","ˌseɪ həˈloʊ tə","Say hello to your mom.","お母さんによろしくね。","セイハロウラユアマーム",[["hello to your","ハロウラユア","F"]],"jhs2 id1",""],
 ["show around","熟語","案内する","ˌʃoʊ əˈraʊnd","I'll show you around.","案内するよ。","アイォショウユーアラウン",[["show you around","ショウユーアラウン","L"]],"jhs3 id1",""],
 ["shake hands","熟語","握手する","ˌʃeɪk ˈhændz","They shook hands and smiled.","彼らは握手してほほえんだ。","ゼイシュックヘァンザンスマイォッ",[["hands and","ヘァンザン","W"]],"jhs2 id1",""],
 ["so that","熟語","〜するために","ˈsoʊ ðət","Speak loudly so that everyone can hear.","みんなが聞こえるように大きな声で話して。","スピークラウッリーソウザレヴリワンクンヒア",[["so that everyone","ソウザレヴリワン","F"]],"jhs3 id1",""],
@@ -1589,7 +1619,7 @@ const WORD_DATA = [
 ["thanks to","熟語","〜のおかげで","ˈθæŋks tə","Thanks to you, I passed.","あなたのおかげで合格した。","セァンクスタユー、アイペァスッ",[["Thanks to you","セァンクスタユー","W"]],"jhs3 id1",""],
 ["the other day","熟語","先日","ði ˈʌðɚ ˌdeɪ","I saw him the other day.","先日彼に会った。","アイソーヒムジアザーデイ",[["the other day","ジアザーデイ","L"]],"jhs3 id1",""],
 ["throw away","熟語","捨てる","ˌθroʊ əˈweɪ","Don't throw it away.","それを捨てないで。","ドンスロウイラウェイ",[["throw it away","スロウイラウェイ","F"]],"jhs2 id1",""],
-["try to","熟語","〜しようとする","ˈtraɪ tə","I'll try to do my best.","全力を尽くすようにする。","アイォチュライタドゥマイベスッ",[["try to","チュライタ","W"]],"jhs2 id1",""],
+["try to","熟語","〜しようとする","ˈtraɪ tə","I'll try to do my best.","全力を尽くすようにする。","アイォチュライラドゥマイベスッ",[["try to","チュライラ","F"]],"jhs2 id1",""],
 ["write down","熟語","書きとめる","ˌraɪt ˈdaʊn","Write down your name.","名前を書いて。","ライッダウニョアネイム",[["down your","ダウニョア","L"]],"jhs2 id1",""],
 ["at the same time","熟語","同時に","ət ðə ˈseɪm ˌtaɪm","We arrived at the same time.","私たちは同時に着いた。","ウィアライヴダッザセイムタイム",[["arrived at the","アライヴダッザ","L"]],"jhs3 id1",""],
 ["a long time ago","熟語","昔","ə ˈlɔːŋ ˌtaɪm əˈɡoʊ","A long time ago, there was a king.","昔、ひとりの王がいた。","アローングタイマゴウ、ゼアワザキング",[["time ago","タイマゴウ","L"],["was a","ワザ","L"]],"jhs2 id1",""],
@@ -1605,7 +1635,7 @@ const WORD_DATA = [
 ["at least","熟語","少なくとも","ət ˈliːst","It takes at least an hour.","少なくとも1時間はかかる。","イッテイクサッリースタナウアー",[["at least an hour","アッリースタナウアー","L"]],"jhs3 id1 t500",""],
 ["in a hurry","熟語","急いで","ɪn ə ˈhɝːi","I'm in a hurry.","急いでいるんだ。","アイミナハーリー",[["I'm in a hurry","アイミナハーリー","L"]],"jhs3 id1",""],
 ["in trouble","熟語","困って","ɪn ˈtrʌbəl","Are you in trouble?","困ってるの?","アーヤインチュラボー",[["Are you","アーヤ","W"]],"jhs3 id1",""],
-["in order to","熟語","〜するために","ɪn ˈɔːrdɚ tə","I study hard in order to pass.","合格するために一生けんめい勉強する。","アイスタディーハーディノーダータペァス",[["hard in order to","ハーディノーダータ","L"]],"jhs3 id1 t500",""],
+["in order to","熟語","〜するために","ɪn ˈɔːrdɚ tə","I study hard in order to pass.","合格するために一生けんめい勉強する。","アイスタディーハーディノーダーラペァス",[["hard in order to","ハーディノーダーラ","L"]],"jhs3 id1 t500",""],
 ["on the way","熟語","途中で","ɑːn ðə ˈweɪ","I bought it on the way home.","帰り道で買った。","アイボーリローンザウェイホウム",[["bought it on the","ボーリローンザ","F"]],"jhs3 id1",""],
 ["on the phone","熟語","電話で","ɑːn ðə ˈfoʊn","He is on the phone now.","彼は今電話中だ。","ヒーズォンザフォウンナウ",[["He is on the","ヒーズォンザ","L"]],"jhs3 id1",""],
 ["please","副詞","どうぞ、お願いします","pliːz","Please sit down.","どうぞお座りください。","プリーズィッダウン",[["Please sit down","プリーズィッダウン","G"]],"jhs1",""],
@@ -1731,11 +1761,11 @@ const WORD_DATA = [
 ["air conditioner","名詞","エアコン","ˈer kənˌdɪʃənɚ","Turn on the air conditioner.","エアコンをつけて。","ターノンジエアカンディシャナー",[["Turn on the air","ターノンジエア","L"]],"jhs2",""],
 ["bakery","名詞","パン屋","ˈbeɪkəri","I bought bread at the bakery.","パン屋でパンを買った。","アイボーッブレッダッザベイカリー",[["bread at the","ブレッダッザ","L"]],"jhs2",""],
 ["bookstore","名詞","書店","ˈbʊkstɔːr","Is there a bookstore near here?","この近くに本屋はある?","イズゼアラブックストーニアヒア",[["there a","ゼアラ","L"]],"jhs1","ブックストー"],
-["department store","名詞","デパート","dɪˈpɑːrtmənt ˌstɔːr","Let's go to the department store.","デパートに行こう。","レッツゴウタザディパーッマンストー",[["go to the","ゴウタザ","W"]],"jhs2 t500",""],
+["department store","名詞","デパート","dɪˈpɑːrtmənt ˌstɔːr","Let's go to the department store.","デパートに行こう。","レッツゴウラザディパーッマンストー",[["go to the","ゴウラザ","F"]],"jhs2 t500",""],
 ["convenience store","名詞","コンビニ","kənˈviːniəns ˌstɔːr","I'll stop at the convenience store.","コンビニに寄るね。","アイォスタッパッザカンヴィーニアンスストー",[["stop at the","スタッパッザ","L"]],"jhs2",""],
 ["shopping mall","名詞","ショッピングモール","ˈʃɑːpɪŋ ˌmɔːl","The shopping mall opens at ten.","ショッピングモールは10時開店だ。","ザシャーピングモーロウパンザッテン",[["mall opens at","モーロウパンザッ","L"]],"jhs2",""],
 ["aquarium","名詞","水族館","əˈkweriəm","We saw sharks at the aquarium.","水族館でサメを見た。","ウィソーシャークサッジアクウェリアム",[["sharks at the","シャークサッジ","L"]],"jhs2",""],
-["amusement park","名詞","遊園地","əˈmjuːzmənt ˌpɑːrk","Let's go to the amusement park.","遊園地に行こう。","レッツゴウタジアミューズマンパーク",[["go to the","ゴウタジ","W"]],"jhs2",""],
+["amusement park","名詞","遊園地","əˈmjuːzmənt ˌpɑːrk","Let's go to the amusement park.","遊園地に行こう。","レッツゴウラジアミューズマンパーク",[["go to the","ゴウラジ","F"]],"jhs2",""],
 ["shrine","名詞","神社","ʃraɪn","We visited a shrine on New Year's Day.","元日に神社にお参りした。","ウィヴィズィリダシュライノンヌーイアーズデイ",[["visited a shrine on","ヴィズィリダシュライノン","F"]],"jhs2",""],
 ["traffic light","名詞","信号","ˈtræfɪk ˌlaɪt","Stop at the traffic light.","信号で止まって。","スタッパッザチュレァフィックライッ",[["Stop at the","スタッパッザ","L"]],"jhs2",""],
 ["bus stop","名詞","バス停","ˈbʌs ˌstɑːp","I'll wait at the bus stop.","バス停で待ってるね。","アイォウェイラッザバススタープ",[["wait at the","ウェイラッザ","F"]],"jhs2",""],
@@ -1752,7 +1782,7 @@ const WORD_DATA = [
 ["clap","動詞","拍手する","klæp","Clap your hands.","手をたたいて。","クレァッピョアヘァンズ",[["Clap your","クレァッピョア","L"]],"jhs2",""],
 ["copy","動詞・名詞","写す、コピー","ˈkɑːpi","Can you make a copy of this?","これをコピーしてくれる?","キャニューメイカカーピーアヴディス",[["make a copy of","メイカカーピアヴ","L"]],"jhs3 t500",""],
 ["invent","動詞","発明する","ɪnˈvent","Who invented the telephone?","電話を発明したのはだれ?","フーインヴェニッザテラフォウン",[["invented the","インヴェニッザ","N"]],"jhs3",""],
-["prefer","動詞","〜のほうを好む","prɪˈfɝː","I prefer tea to coffee.","コーヒーより紅茶が好き。","アイプリファーティータカーフィー",[["tea to coffee","ティータカーフィー","W"]],"jhs3 t500",""],
+["prefer","動詞","〜のほうを好む","prɪˈfɝː","I prefer tea to coffee.","コーヒーより紅茶が好き。","アイプリファーティーラカーフィー",[["tea to coffee","ティーラカーフィー","F"]],"jhs3 t500",""],
 ["repair","動詞・名詞","修理する、修理","rɪˈper","Can you repair my bike?","自転車を修理してもらえる?","キャニューリペアマイバイク",[["Can you","キャニュー","L"]],"jhs3 t500",""],
 ["rent","動詞・名詞","借りる、家賃","rent","Let's rent a car.","車を借りよう。","レッツレンタカー",[["rent a car","レンタカー","N"]],"jhs3 t500",""],
 ["sit","動詞","座る","sɪt","Can I sit here?","ここに座ってもいい?","キャナイスィッヒア",[["sit here","スィッヒア","D"]],"jhs1",""],
@@ -1797,7 +1827,7 @@ const WORD_DATA = [
 ["go home","熟語","家に帰る","ˌɡoʊ ˈhoʊm","It's time to go home.","もう帰る時間だ。","イッツタイムタゴウホウム",[["time to","タイムタ","W"]],"jhs1 id1",""],
 ["go abroad","熟語","海外に行く","ˌɡoʊ əˈbrɔːd","I want to go abroad someday.","いつか海外に行きたい。","アイワナゴウアブローッサムデイ",[["go abroad","ゴウアブローッ","L"]],"jhs3 id1",""],
 ["on foot","熟語","徒歩で","ɑːn ˈfʊt","It takes ten minutes on foot.","歩いて10分かかる。","イッテイクステンミニッツァンフッ",[["minutes on foot","ミニッツァンフッ","L"]],"jhs2 id1",""],
-["by bus","熟語","バスで","baɪ ˈbʌs","I go to school by bus.","バスで通学する。","アイゴウタスクーォバイバス",[["go to","ゴウタ","W"]],"jhs1 id1",""],
+["by bus","熟語","バスで","baɪ ˈbʌs","I go to school by bus.","バスで通学する。","アイゴウラスクーォバイバス",[["go to","ゴウラ","F"]],"jhs1 id1",""],
 ["help with","熟語","(人の〜を)手伝う","ˈhelp wɪð","I'll help you with it.","それを手伝うよ。","アイォヘォピュウィズィッ",[["help you with it","ヘォピュウィズィッ","L"]],"jhs2 id1",""],
 ["hear about","熟語","〜について聞く","ˈhɪr əˌbaʊt","Did you hear about the accident?","事故のこと聞いた?","ディジュヒアラバウッジエァクサダン",[["hear about the","ヒアラバウッジ","L"]],"jhs3 id1","ヒアラバウ(ト)"],
 ["look around","熟語","見回す、見て回る","ˌlʊk əˈraʊnd","I'm just looking around.","見ているだけです。","アイムジャスルッキンガラウン",[["looking around","ルッキンガラウン","L"]],"jhs2 id1 t500",""],
@@ -1903,7 +1933,7 @@ const WORD_DATA = [
 ["memo","名詞","社内連絡、メモ","ˈmemoʊ","Did you read the memo?","社内連絡を読んだ?","ディジュリーッザメモウ",[["Did you","ディジュ","Y"]],"t500",""],
 ["elevator","名詞","エレベーター","ˈeləveɪt̬ɚ","Take the elevator to the fifth floor.","エレベーターで5階へどうぞ。","テイクジエラヴェイラータザフィフスフロー",[["Take the elevator","テイクジエラヴェイラー","L"]],"t500",""],
 ["lobby","名詞","ロビー","ˈlɑːbi","Let's meet in the lobby.","ロビーで会いましょう。","レッツミーリンザラービー",[["meet in the","ミーリンザ","F"]],"t500",""],
-["reception","名詞","受付、歓迎会","rɪˈsepʃən","Please go to the reception desk.","受付へお越しください。","プリーズゴウタザリセプシャンデスク",[["go to the","ゴウタザ","W"]],"t500 hs2",""],
+["reception","名詞","受付、歓迎会","rɪˈsepʃən","Please go to the reception desk.","受付へお越しください。","プリーズゴウラザリセプシャンデスク",[["go to the","ゴウラザ","F"]],"t500 hs2",""],
 ["receptionist","名詞","受付係","rɪˈsepʃənɪst","Ask the receptionist.","受付の人に聞いて。","エァスクザリセプシャニスッ",[["Ask the","エァスクザ","H"]],"t500",""],
 ["security","名詞","警備、安全","sɪˈkjʊrət̬i","Please go through security.","保安検査を通ってください。","プリーズゴウスルースィキュラリー",[["security","スィキュラリー","F"]],"t500 hs1",""],
 ["airline","名詞","航空会社","ˈerlaɪn","Which airline are you flying?","どの航空会社で行くの?","ウィッチエアライナーユーフライイン",[["airline are you","エアライナーユー","L"]],"t500",""],
@@ -2087,7 +2117,7 @@ const WORD_DATA = [
 ["look up to","熟語","〜を尊敬する","ˌlʊk ˈʌp tə","I look up to my father.","父を尊敬している。","アイルッカップタマイファーザー",[["look up to","ルッカップタ","L"]],"id2",""],
 ["make up","熟語","作り上げる、化粧する、仲直りする","ˌmeɪk ˈʌp","He made up a story.","彼は話をでっちあげた。","ヒーメイダッパストーリー",[["made up a","メイダッパ","L"]],"id2",""],
 ["pass away","熟語","亡くなる","ˌpæs əˈweɪ","My grandfather passed away last year.","祖父は昨年亡くなった。","マイグレァンファーザーペァスタウェイレァスチャー",[["passed away","ペァスタウェイ","L"]],"id2",""],
-["pay attention to","熟語","〜に注意を払う","ˌpeɪ əˈtenʃən tə","Pay attention to the teacher.","先生の話をよく聞いて。","ペイアテンシャンタザティーチャー",[["attention to the","アテンシャンタザ","W"]],"id2 t500",""],
+["pay attention to","熟語","〜に注意を払う","ˌpeɪ əˈtenʃən tə","Pay attention to the teacher.","先生の話をよく聞いて。","ペイアテンシャンヌザティーチャー",[["attention to the","アテンシャンヌザ","W"]],"id2 t500",""],
 ["pick out","熟語","選び出す","ˌpɪk ˈaʊt","Pick out the one you like.","好きなのを選んで。","ピッカウッザワンユーライク",[["Pick out the","ピッカウッザ","L"]],"id2",""],
 ["point out","熟語","指摘する","ˌpɔɪnt ˈaʊt","He pointed out my mistake.","彼は私の間違いを指摘した。","ヒーポイニダウッマイミステイク",[["pointed out","ポイニダウッ","N"]],"id2 t500","ポイナウ(ト)"],
 ["put off","熟語","延期する","ˌpʊt̬ ˈɔːf","Don't put off your homework.","宿題を後回しにしないで。","ドンプローフュアホウムワーク",[["put off your","プローフュア","F"]],"id2 t500",""],
@@ -2113,7 +2143,7 @@ const WORD_DATA = [
 ["be familiar with","熟語","〜をよく知っている","bi fəˈmɪljɚ wɪð","Are you familiar with this area?","この辺りには詳しい?","アーヤファミリャーウィズディセリア",[["this area","ディセリア","L"]],"id2",""],
 ["be filled with","熟語","〜でいっぱいだ","bi ˈfɪld wɪð","The room was filled with smoke.","部屋は煙でいっぱいだった。","ザルームワズフィォッウィズスモウク",[["filled with","フィォッウィズ","D"]],"id2",""],
 ["be fond of","熟語","〜が好きだ","bi ˈfɑːnd əv","I'm fond of cats.","ねこが好きだ。","アイムファーンダヴキャッツ",[["fond of","ファーンダヴ","L"]],"id2",""],
-["be likely to","熟語","〜しそうだ","bi ˈlaɪkli tə","It's likely to rain.","雨が降りそうだ。","イッツライクリータレイン",[["likely to","ライクリータ","W"]],"id2 t500",""],
+["be likely to","熟語","〜しそうだ","bi ˈlaɪkli tə","It's likely to rain.","雨が降りそうだ。","イッツライクリーラレイン",[["likely to","ライクリーラ","F"]],"id2 t500",""],
 ["be pleased with","熟語","〜に満足している","bi ˈpliːzd wɪð","I'm pleased with the result.","結果に満足している。","アイムプリーズッウィズザリザォッ",[["pleased with","プリーズッウィズ","D"]],"id2",""],
 ["be satisfied with","熟語","〜に満足している","bi ˈsæt̬ɪsfaɪd wɪð","Are you satisfied with our service?","当社のサービスにご満足ですか?","アーヤセァリスファイッウィザウアサーヴィス",[["satisfied with our","セァリスファイッウィザウア","D"]],"id2 t500",""],
 ["be similar to","熟語","〜に似ている","bi ˈsɪmɪlɚ tə","My bag is similar to yours.","私のかばんはあなたのに似ている。","マイベァギズスィミラータユアズ",[["bag is","ベァギズ","L"]],"id2",""],
@@ -2137,7 +2167,7 @@ const WORD_DATA = [
 ["for a while","熟語","しばらくの間","fɚr ə ˈwaɪl","Let's rest for a while.","しばらく休もう。","レッツレスファラワイォ",[["for a while","ファラワイォ","L"]],"id2",""],
 ["for instance","熟語","たとえば","fɚr ˈɪnstəns","For instance, you can take the bus.","たとえば、バスに乗ることもできる。","ファリンスタンス、ユークンテイクザバス",[["For instance","ファリンスタンス","L"]],"id2",""],
 ["in addition","熟語","さらに","ɪn əˈdɪʃən","In addition, we offer free Wi-Fi.","さらに、無料Wi-Fiもあります。","イナディシャン、ウィオーファーフリーワイファイ",[["In addition","イナディシャン","L"]],"id2 t500",""],
-["in addition to","熟語","〜に加えて","ɪn əˈdɪʃən tə","In addition to English, he speaks French.","英語に加えて、彼はフランス語も話す。","イナディシャンタイングリッシュ、ヒースピークスフレンチ",[["addition to English","アディシャンタイングリッシュ","W"]],"id2 t500",""],
+["in addition to","熟語","〜に加えて","ɪn əˈdɪʃən tə","In addition to English, he speaks French.","英語に加えて、彼はフランス語も話す。","イナディシャンタイングリッシュ、ヒースピークスフレンチ",[["addition to English","アディシャンヌイングリッシュ","W"]],"id2 t500",""],
 ["in case","熟語","〜の場合に備えて","ɪn ˈkeɪs","Take an umbrella in case it rains.","雨に備えて傘を持っていって。","テイカナンブレラインケイスィッレインズ",[["case it","ケイスィッ","L"]],"id2",""],
 ["in common","熟語","共通して","ɪn ˈkɑːmən","We have a lot in common.","私たちには共通点が多い。","ウィハヴァラーリンカーマン",[["a lot in common","アラーリンカーマン","F"]],"id2",""],
 ["in general","熟語","一般に","ɪn ˈdʒenərəl","In general, it's a good idea.","一般的には、いい考えだ。","インジェナラォ、イッツァグッダイディーア",[["it's a","イッツァ","L"]],"id2",""],
@@ -2207,7 +2237,7 @@ const WORD_DATA = [
 ["depend on","熟語","〜に頼る、〜しだいである","dɪˈpend ɑːn","It depends on you.","あなたしだいだ。","イッディペンゾンユー",[["depends on you","ディペンゾンユー","L"]],"id2 t500",""],
 ["rely on","熟語","〜に頼る","rɪˈlaɪ ɑːn","You can rely on him.","彼は頼りになる。","ユークンリライアーンヒム",[["rely on him","リライアーニム","H"]],"id3 t700",""],
 ["consist of","熟語","〜から成る","kənˈsɪst əv","The team consists of five members.","チームは5人で構成されている。","ザティームカンスィスツァヴファイヴメンバーズ",[["consists of","カンスィスツァヴ","L"]],"id3 t700",""],
-["refer to","熟語","〜に言及する、参照する","rɪˈfɝː tə","Please refer to the manual.","マニュアルを参照してください。","プリーズリファータザメァニュアォ",[["refer to the","リファータザ","W"]],"id3 t700",""],
+["refer to","熟語","〜に言及する、参照する","rɪˈfɝː tə","Please refer to the manual.","マニュアルを参照してください。","プリーズリファーラザメァニュアォ",[["refer to the","リファーラザ","F"]],"id3 t700",""],
 ["apply for","熟語","〜に申し込む","əˈplaɪ fɚ","I applied for a new passport.","新しいパスポートを申請した。","アイアプライッファラヌーペァスポーッ",[["applied for a new","アプライッファラヌー","L"]],"id2 t500",""],
 ["cope with","熟語","〜にうまく対処する","ˈkoʊp wɪð","How do you cope with stress?","ストレスにどう対処してる?","ハウダユコウプウィズスチュレス",[["do you","ダユ","W"]],"id3 t700",""],
 ["do without","熟語","〜なしで済ます","ˌduː wɪˈðaʊt","I can't do without coffee.","コーヒーなしではやっていけない。","アイキャンドゥーウィザウカーフィー",[["do without","ドゥーウィザウ","D"]],"id3",""],
@@ -2215,7 +2245,7 @@ const WORD_DATA = [
 ["as well as","熟語","〜だけでなく","əz ˈwel əz","She speaks French as well as English.","彼女は英語だけでなくフランス語も話す。","シースピークスフレンチャズウェラズイングリッシュ",[["as well as English","アズウェラズイングリッシュ","L"]],"id2 t500",""],
 ["rather than","熟語","〜よりむしろ","ˈræðɚ ðən","I'll walk rather than take a bus.","バスに乗るより歩く。","アイォウォークレァザーザンテイカバス",[["take a","テイカ","L"]],"id2",""],
 ["regardless of","熟語","〜に関係なく","rɪˈɡɑːrdləs əv","Anyone can join regardless of age.","年齢に関係なくだれでも参加できる。","エニワンクンジョインリガーッラサヴエイジ",[["regardless of age","リガーッラサヴエイジ","L"]],"id3 t700",""],
-["due to","熟語","〜のために(原因)","ˈduː tə","The flight was canceled due to bad weather.","悪天候のため欠航になった。","ザフライッワズキャンソードゥータベァッウェザー",[["due to bad","ドゥータベァッ","W"]],"id3 t700",""],
+["due to","熟語","〜のために(原因)","ˈduː tə","The flight was canceled due to bad weather.","悪天候のため欠航になった。","ザフライッワズキャンソードゥーラベァッウェザー",[["due to bad","ドゥーラベァッ","F"]],"id3 t700",""],
 ["in favor of","熟語","〜に賛成して","ɪn ˈfeɪvɚr əv","I'm in favor of the plan.","その計画に賛成だ。","アイミンフェイヴァーラヴザプレァン",[["favor of the","フェイヴァーラヴザ","L"]],"id3 t700",""],
 ["on behalf of","熟語","〜を代表して","ɑːn bɪˈhæf əv","On behalf of the company, thank you.","会社を代表してお礼申し上げます。","アーンビヘァファヴザカンパニー、セァンキュー",[["behalf of the","ビヘァファヴザ","L"]],"id3 t700",""],
 ["apart from","熟語","〜を除いて、〜に加えて","əˈpɑːrt frəm","Apart from that, everything is fine.","それを除けば、すべて順調です。","アパーッフラムザッ、エヴリスィンギズファイン",[["Apart from","アパーッフラム","D"]],"id3 t700",""],
@@ -2265,7 +2295,7 @@ const WORD_DATA = [
 ["log in","熟語","ログインする","ˌlɑːɡ ˈɪn","Log in with your password.","パスワードでログインして。","ラーギンウィジュアペァスワーッ",[["Log in","ラーギン","L"],["with your","ウィジュア","Y"]],"id1 t500",""],
 ["look over","熟語","ざっと目を通す","ˌlʊk ˈoʊvɚ","Could you look over my report?","報告書に目を通してもらえますか?","クッジャルッコウヴァーマイリポーッ",[["look over","ルッコウヴァー","L"]],"id2 t500",""],
 ["mix up","熟語","混同する","ˌmɪks ˈʌp","I always mix up their names.","いつも彼らの名前を混同する。","アイオーォウェイズミクサップゼアネイムズ",[["mix up","ミクサップ","L"]],"id2",""],
-["move on","熟語","先へ進む","ˌmuːv ˈɑːn","Let's move on to the next topic.","次の話題に移りましょう。","レッツムーヴァーンタザネクスターピック",[["move on to the","ムーヴァーンタザ","L"]],"id2 t500",""],
+["move on","熟語","先へ進む","ˌmuːv ˈɑːn","Let's move on to the next topic.","次の話題に移りましょう。","レッツムーヴァーンヌザネクスターピック",[["move on to the","ムーヴァーンヌザ","L"]],"id2 t500",""],
 ["pay for","熟語","〜の代金を払う","ˈpeɪ fɚ","I'll pay for dinner.","夕食代は私が払うよ。","アイォペイファディナー",[["pay for","ペイファ","W"]],"id1",""],
 ["pay off","熟語","報われる、完済する","ˌpeɪ ˈɔːf","Your hard work will pay off.","努力は報われるよ。","ユアハーッワークウィォペイオーフ",[["pay off","ペイオーフ","L"]],"id2",""],
 ["put together","熟語","組み立てる、まとめる","ˌpʊt təˈɡeðɚ","Can you help me put this together?","これを組み立てるのを手伝って。","キャニューヘォプミープッディスタゲザー",[["put this together","プッディスタゲザー","D"]],"id2 t500",""],
@@ -2295,7 +2325,7 @@ const WORD_DATA = [
 ["be bad at","熟語","〜が下手だ","bi ˈbæd ət","I'm bad at cooking.","料理が下手だ。","アイムベァダックッキン",[["bad at","ベァダッ","L"]],"id1",""],
 ["be close to","熟語","〜に近い、〜と親しい","bi ˈkloʊs tə","The hotel is close to the station.","ホテルは駅に近い。","ザホウテリズクロウスタザステイシャン",[["close to the","クロウスタザ","W"]],"id1 t500",""],
 ["be curious about","熟語","〜に興味がある","bi ˈkjʊriəs əˌbaʊt","Kids are curious about everything.","子どもは何にでも興味をもつ。","キッザーキュリアサバウテヴリスィン",[["curious about everything","キュリアサバウテヴリスィン","L"]],"id2",""],
-["be eager to","熟語","しきりに〜したがる","bi ˈiːɡɚ tə","She is eager to learn.","彼女はとても学びたがっている。","シーズィーガータラーン",[["She is eager to","シーズィーガータ","L"]],"id3 t700",""],
+["be eager to","熟語","しきりに〜したがる","bi ˈiːɡɚ tə","She is eager to learn.","彼女はとても学びたがっている。","シーズィーガーララーン",[["She is eager to","シーズィーガーラ","L"]],"id3 t700",""],
 ["be excited about","熟語","〜にわくわくしている","bi ɪkˈsaɪt̬ɪd əˌbaʊt","I'm excited about the trip.","旅行にわくわくしている。","アイムイクサイリダバウッザチュリップ",[["excited about the","イクサイリダバウッザ","F"]],"id1",""],
 ["be grateful for","熟語","〜に感謝している","bi ˈɡreɪtfəl fɚ","I'm grateful for your help.","手伝ってくれて感謝している。","アイムグレイッフォーファユアヘォプ",[["grateful for your","グレイッフォーファユア","W"]],"id3 t500",""],
 ["be jealous of","熟語","〜をうらやむ","bi ˈdʒeləs əv","I'm jealous of you.","うらやましいな。","アイムジェラサヴュー",[["jealous of you","ジェラサヴュー","L"]],"id2",""],
@@ -2315,8 +2345,8 @@ const WORD_DATA = [
 ["be devoted to","熟語","〜に専念している","bi dɪˈvoʊt̬ɪd tə","She is devoted to her work.","彼女は仕事に打ち込んでいる。","シーズディヴォウリッタハーワーク",[["devoted to her","ディヴォウリッタハー","F"]],"id3 t900",""],
 ["be exposed to","熟語","〜にさらされる","bi ɪkˈspoʊzd tə","Don't be exposed to the sun too long.","日光に長く当たりすぎないで。","ドンビーイクスポウズッタザサントゥーローング",[["exposed to the","イクスポウズッタザ","G"]],"id3 t900",""],
 ["be made up of","熟語","〜から成る","bi ˌmeɪd ˈʌp əv","The team is made up of ten people.","チームは10人で構成されている。","ザティーミズメイダッパヴテンピーポー",[["made up of","メイダッパヴ","L"]],"id3 t700",""],
-["be sure to","熟語","必ず〜する","bi ˈʃʊr tə","Be sure to lock the door.","必ずドアに鍵をかけて。","ビーシュアタラークザドー",[["sure to","シュアタ","W"]],"id2 t500",""],
-["be free to","熟語","自由に〜してよい","bi ˈfriː tə","You are free to leave.","帰ってもかまいません。","ユアフリータリーヴ",[["free to","フリータ","W"]],"id2",""],
+["be sure to","熟語","必ず〜する","bi ˈʃʊr tə","Be sure to lock the door.","必ずドアに鍵をかけて。","ビーシュアララークザドー",[["sure to","シュアラ","F"]],"id2 t500",""],
+["be free to","熟語","自由に〜してよい","bi ˈfriː tə","You are free to leave.","帰ってもかまいません。","ユアフリーラリーヴ",[["free to","フリーラ","F"]],"id2",""],
 ["be bound to","熟語","きっと〜する","bi ˈbaʊnd tə","It's bound to rain tomorrow.","明日はきっと雨だ。","イッツバウンタレインタマーロウ",[["bound to","バウンタ","N"]],"id3",""],
 ["be engaged in","熟語","〜に従事している","bi ɪnˈɡeɪdʒd ɪn","He is engaged in research.","彼は研究に従事している。","ヒーズィンゲイジディンリーサーチ",[["engaged in","インゲイジディン","L"]],"id3 t900",""],
 ["be faced with","熟語","〜に直面している","bi ˈfeɪst wɪð","We are faced with a big problem.","大きな問題に直面している。","ウィアーフェイスッウィザビッグプラーブラム",[["with a big","ウィザビッグ","L"]],"id3 t700",""],
@@ -2372,7 +2402,7 @@ const WORD_DATA = [
 ["for the sake of","熟語","〜のために","fɚ ðə ˈseɪk əv","Do it for the sake of your health.","健康のためにそうして。","ドゥーイッファザセイカヴュアヘォス",[["sake of your","セイカヴュア","L"]],"id3",""],
 ["come to an end","熟語","終わる","ˌkʌm tu ən ˈend","The summer vacation came to an end.","夏休みが終わった。","ザサマーヴェイケイシャンケイムトゥアネン",[["came to an end","ケイムトゥアネン","L"]],"id2","カムトゥアネン(ド)"],
 ["do me a favor","熟語","頼みを聞く","ˌduː mi ə ˈfeɪvɚ","Could you do me a favor?","お願いがあるのですが。","クッジャドゥーミーアフェイヴァー",[["do me a favor","ドゥーミーアフェイヴァー","L"]],"id1",""],
-["feel free to","熟語","遠慮なく〜する","ˌfiːl ˈfriː tə","Feel free to ask me anything.","何でも気軽に聞いてね。","フィーォフリータエァスクミーエニスィン",[["free to ask","フリータエァスク","W"]],"id1 t500",""],
+["feel free to","熟語","遠慮なく〜する","ˌfiːl ˈfriː tə","Feel free to ask me anything.","何でも気軽に聞いてね。","フィーォフリーラエァスクミーエニスィン",[["free to ask","フリーラエァスク","F"]],"id1 t500",""],
 ["get used to","熟語","〜に慣れる","ˌɡet ˈjuːst tə","You'll get used to it.","そのうち慣れるよ。","ユォゲッユースタイッ",[["get used to it","ゲッユースタイッ","G"]],"id2",""],
 ["give it a try","熟語","試してみる","ˌɡɪv ɪt̬ ə ˈtraɪ","Why don't you give it a try?","試してみたら?","ワイドウンチャギヴィラチュライ",[["give it a try","ギヴィラチュライ","F"]],"id1",""],
 ["go for a walk","熟語","散歩に行く","ˌɡoʊ fɚr ə ˈwɔːk","Let's go for a walk.","散歩に行こう。","レッツゴウファラウォーク",[["go for a walk","ゴウファラウォーク","L"]],"id1",""],
@@ -2550,7 +2580,7 @@ const WORD_DATA = [
 ["have an effect on","熟語","〜に影響を与える","ˌhæv ən ɪˈfekt ɑːn","Music has an effect on our mood.","音楽は気分に影響を与える。","ミューズィックハザニフェクトンアウアムーッ",[["has an effect on our","ハザニフェクトンアウア","L"]],"id3 t700",""],
 ["hold a meeting","熟語","会議を開く","ˌhoʊld ə ˈmiːt̬ɪŋ","We will hold a meeting tomorrow.","明日会議を開きます。","ウィウィォホウォダミーリンタマーロウ",[["hold a meeting","ホウォダミーリン","L"]],"id2 t500",""],
 ["keep a diary","熟語","日記をつける","ˌkiːp ə ˈdaɪəri","I keep a diary in English.","英語で日記をつけている。","アイキーパダイアリーインイングリッシュ",[["keep a diary","キーパダイアリー","L"]],"id1",""],
-["keep calm","熟語","落ち着いている","ˌkiːp ˈkɑːm","Try to keep calm.","落ち着くようにして。","チュライタキープカーム",[["Try to","チュライタ","W"]],"id2",""],
+["keep calm","熟語","落ち着いている","ˌkiːp ˈkɑːm","Try to keep calm.","落ち着くようにして。","チュライラキープカーム",[["Try to","チュライラ","F"]],"id2",""],
 ["keep quiet","熟語","静かにしている、黙っている","ˌkiːp ˈkwaɪət","Please keep quiet in the library.","図書館では静かにしてください。","プリーズキープクワイアリンザライブレリー",[["quiet in the","クワイアリンザ","F"]],"id1",""],
 ["keep track of","熟語","〜を把握しておく","ˌkiːp ˈtræk əv","I keep track of my spending.","支出を記録している。","アイキープチュレァッカヴマイスペンディン",[["track of my","チュレァッカヴマイ","L"]],"id3 t700",""],
 ["lose your way","熟語","道に迷う","ˌluːz jɚ ˈweɪ","Be careful not to lose your way.","道に迷わないように気をつけて。","ビーケアフォーナッタルージュアウェイ",[["lose your","ルージュア","Y"]],"id2","ルージュアウェイ"],
@@ -2639,7 +2669,7 @@ const WORD_DATA = [
 ["champion","名詞","優勝者","ˈtʃæmpiən","He is the world champion.","彼は世界チャンピオンだ。","ヒーズザワーォッチェァンピアン",[["world champion","ワーォッチェァンピアン","D"]],"hs1",""],
 ["channel","名詞","(テレビの)チャンネル、経路","ˈtʃænəl","Change the channel.","チャンネルを変えて。","チェインジザチェァノー",[["Change the","チェインジザ","H"]],"hs1",""],
 ["chapter","名詞","章","ˈtʃæptɚ","Read chapter one for homework.","宿題で第1章を読んで。","リーッチェァプターワンファホウムワーク",[["Read chapter","リーッチェァプター","D"]],"hs1",""],
-["charity","名詞","慈善(団体)","ˈtʃerət̬i","We gave money to charity.","慈善団体に寄付した。","ウィゲイヴマニータチェラリー",[["money to charity","マニータチェラリー","W"]],"hs1",""],
+["charity","名詞","慈善(団体)","ˈtʃerət̬i","We gave money to charity.","慈善団体に寄付した。","ウィゲイヴマニーラチェラリー",[["money to charity","マニーラチェラリー","F"]],"hs1",""],
 ["chemical","名詞・形容詞","化学物質、化学の","ˈkemɪkəl","Don't use harmful chemicals.","有害な化学物質を使わないで。","ドンユーズハームフォーケミコーズ",[["Don't use","ドンユーズ","N"]],"hs1",""],
 ["citizen","名詞","市民","ˈsɪt̬əzən","He became a US citizen.","彼はアメリカ市民になった。","ヒービケイマユーエススィラザン",[["became a","ビケイマ","L"]],"hs1",""],
 ["claim","動詞・名詞","主張する、要求","kleɪm","He claims that he saw a UFO.","彼はUFOを見たと主張している。","ヒークレイムザリーソーアユーエフォウ",[["claims that he","クレイムザリー","H"]],"hs1 t700",""],
@@ -2696,7 +2726,7 @@ const WORD_DATA = [
 ["district","名詞","地区","ˈdɪstrɪkt","This is a business district.","ここはビジネス街だ。","ディスィザビズナスディスチュリクッ",[["This is a","ディスィザ","L"]],"hs1 t500",""],
 ["dozen","名詞","1ダース","ˈdʌzən","I bought a dozen eggs.","卵を1ダース買った。","アイボーラダザネッグズ",[["bought a dozen eggs","ボーラダザネッグズ","L"]],"hs1",""],
 ["dramatic","形容詞","劇的な","drəˈmæt̬ɪk","There was a dramatic change.","劇的な変化があった。","ゼアワザジュラメァリックチェインジ",[["was a dramatic","ワザジュラメァリック","L"]],"hs1",""],
-["duty","名詞","義務、職務","ˈduːt̬i","It's my duty to help.","手伝うのは私の務めだ。","イッツマイドゥーリータヘォプ",[["duty to","ドゥーリータ","F"]],"hs1 t500",""],
+["duty","名詞","義務、職務","ˈduːt̬i","It's my duty to help.","手伝うのは私の務めだ。","イッツマイドゥーリーラヘォプ",[["duty to","ドゥーリーラ","F"]],"hs1 t500",""],
 ["economic","形容詞","経済の","ˌekəˈnɑːmɪk","The economic situation is bad.","経済状況は悪い。","ジエカナーミックスィチュエイシャニズベァッ",[["The economic","ジエカナーミック","L"]],"hs1 t500",""],
 ["economy","名詞","経済","ɪˈkɑːnəmi","The economy is growing.","経済が成長している。","ジイカーナミーイズグロウイン",[["The economy","ジイカーナミー","L"]],"hs1 t500",""],
 ["edge","名詞","端、ふち","edʒ","Don't stand near the edge.","端の近くに立たないで。","ドンステァンニアジエッジ",[["near the edge","ニアジエッジ","L"]],"hs1",""],
@@ -2766,7 +2796,7 @@ const WORD_DATA = [
 ["heat","名詞","熱、暑さ","hiːt","I can't stand the heat.","暑さに耐えられない。","アイキャンステァンザヒーッ",[["stand the","ステァンザ","H"]],"hs1",""],
 ["height","名詞","高さ、身長","haɪt","What's your height?","身長はいくつ?","ワッチュアハイッ",[["What's your","ワッチュア","Y"]],"hs1",""],
 ["highway","名詞","幹線道路","ˈhaɪweɪ","Traffic on the highway was heavy.","幹線道路は渋滞していた。","チュレァフィッコンザハイウェイワズヘヴィー",[["Traffic on the","チュレァフィッコンザ","L"]],"hs1 t500",""],
-["honor","名詞","名誉","ˈɑːnɚ","It's an honor to meet you.","お会いできて光栄です。","イッツァナーナータミーチュー",[["It's an honor to","イッツァナーナータ","L"]],"hs1",""],
+["honor","名詞","名誉","ˈɑːnɚ","It's an honor to meet you.","お会いできて光栄です。","イッツァナーナーラミーチュー",[["It's an honor to","イッツァナーナーラ","L"]],"hs1",""],
 ["identity","名詞","身元、独自性","aɪˈdent̬ət̬i","Please show your ID to prove your identity.","身分証で本人確認をしてください。","プリーズショウユアアイディータプルーヴュアアイデナリー",[["prove your identity","プルーヴュアアイデナリー","L"]],"hs2",""],
 ["ignore","動詞","無視する","ɪɡˈnɔːr","Don't ignore me.","私を無視しないで。","ドンイグノーミー",[["Don't ignore","ドンイグノー","N"]],"hs1",""],
 ["illness","名詞","病気","ˈɪlnəs","He died after a long illness.","彼は長い闘病の末に亡くなった。","ヒーダイデァフターラローングイォナス",[["died after a","ダイデァフターラ","L"]],"hs1",""],
@@ -2790,7 +2820,7 @@ const WORD_DATA = [
 ["intelligence","名詞","知能","ɪnˈtelɪdʒəns","Dolphins have high intelligence.","イルカは知能が高い。","ダーォフィンズハヴハイインテリジャンス",[["high intelligence","ハイインテリジャンス","L"]],"hs1",""],
 ["intend","動詞","〜するつもりである","ɪnˈtend","I intend to study abroad.","留学するつもりだ。","アイインテンタスタディアブローッ",[["intend to","インテンタ","N"]],"hs1",""],
 ["interest","名詞・動詞","興味、利子、興味を持たせる","ˈɪntrəst","I have no interest in sports.","スポーツには興味がない。","アイハヴノウインチュラスティンスポーツ",[["interest in","インチュラスティン","L"]],"hs1 t500",""],
-["interrupt","動詞","さえぎる、邪魔する","ˌɪnt̬əˈrʌpt","Sorry to interrupt.","話の途中ですみません。","サーリータイナラプッ",[["Sorry to interrupt","サーリータイナラプッ","W"]],"hs1",""],
+["interrupt","動詞","さえぎる、邪魔する","ˌɪnt̬əˈrʌpt","Sorry to interrupt.","話の途中ですみません。","サーリーライナラプッ",[["Sorry to interrupt","サーリーライナラプッ","F"]],"hs1",""],
 ["invest","動詞","投資する","ɪnˈvest","He invested in the company.","彼はその会社に投資した。","ヒーインヴェスティディンザカンパニー",[["invested in the","インヴェスティディンザ","L"]],"hs1 t500",""],
 ["involve","動詞","含む、巻き込む","ɪnˈvɑːlv","The job involves a lot of travel.","その仕事は出張が多い。","ザジャーブインヴァーォヴザラーラチュレァヴォー",[["involves a lot of","インヴァーォヴザラーラ","F"]],"hs1 t500",""],
 ["issue","名詞","問題、(雑誌の)号","ˈɪʃuː","This is an important issue.","これは重要な問題だ。","ディスィザニンポータニシュー",[["important issue","インポータニシュー","L"]],"hs1 t500",""],
@@ -2806,7 +2836,7 @@ const WORD_DATA = [
 ["leisure","名詞","余暇","ˈliːʒɚ","What do you do in your leisure time?","余暇には何をしている?","ワッダユドゥーイニョアリージャータイム",[["in your","イニョア","L"]],"hs1",""],
 ["length","名詞","長さ","leŋθ","Measure the length of the table.","テーブルの長さを測って。","メジャーザレングサヴザテイボー",[["length of the","レングサヴザ","L"]],"hs1",""],
 ["license","名詞","免許","ˈlaɪsəns","Do you have a driver's license?","運転免許を持っている?","ダユハヴァジュライヴァーズライサンス",[["have a","ハヴァ","L"]],"hs1 t500",""],
-["likely","形容詞・副詞","ありそうな、たぶん","ˈlaɪkli","He is likely to win.","彼は勝ちそうだ。","ヒーズライクリータウィン",[["likely to","ライクリータ","W"]],"hs1 t500",""],
+["likely","形容詞・副詞","ありそうな、たぶん","ˈlaɪkli","He is likely to win.","彼は勝ちそうだ。","ヒーズライクリーラウィン",[["likely to","ライクリーラ","F"]],"hs1 t500",""],
 ["limit","名詞・動詞","限界、制限する","ˈlɪmɪt","There is a time limit.","時間制限がある。","ゼアリザタイムリミッ",[["There is a","ゼアリザ","L"]],"hs1 t500",""],
 ["link","名詞・動詞","つながり、結びつける","lɪŋk","Click on the link.","リンクをクリックして。","クリッコンザリンク",[["Click on the","クリッコンザ","L"]],"hs1 t500",""],
 ["liquid","名詞・形容詞","液体、液状の","ˈlɪkwɪd","Water is a liquid.","水は液体だ。","ワーラリザリクウィッ",[["Water is a","ワーラリザ","L"]],"hs1",""],
@@ -2899,7 +2929,7 @@ const WORD_DATA = [
 ["range","名詞・動詞","範囲、(範囲が)及ぶ","reɪndʒ","We have a wide range of products.","幅広い品ぞろえがあります。","ウィハヴァワイッレインジャヴプラーダクツ",[["range of","レインジャヴ","L"]],"hs1 t500",""],
 ["rank","名詞・動詞","地位、位置する","ræŋk","It ranks as one of the best.","それは最高のものの一つに数えられる。","イッレァンクサズワナヴザベスッ",[["ranks as one of the","レァンクサズワナヴザ","L"]],"hs1",""],
 ["rapid","形容詞","急速な","ˈræpɪd","There was a rapid change.","急速な変化があった。","ゼアワザレァピッチェインジ",[["was a","ワザ","L"]],"hs1 t500",""],
-["rare","形容詞","まれな","rer","It's rare to see snow here.","ここで雪を見るのは珍しい。","イッツレアタスィースノウヒア",[["rare to","レアタ","W"]],"hs1",""],
+["rare","形容詞","まれな","rer","It's rare to see snow here.","ここで雪を見るのは珍しい。","イッツレアラスィースノウヒア",[["rare to","レアラ","F"]],"hs1",""],
 ["raw","形容詞","生の","rɔː","I don't eat raw fish.","生魚は食べない。","アイドンイーッローフィッシュ",[["don't eat","ドンイーッ","N"]],"hs1",""],
 ["react","動詞","反応する","riˈækt","How did he react?","彼はどう反応した?","ハウディディーリエァクッ",[["did he react","ディディーリエァクッ","H"]],"hs1",""],
 ["reality","名詞","現実","riˈælət̬i","It became a reality.","それは現実になった。","イッビケイマリエァラリー",[["became a reality","ビケイマリエァラリー","L"]],"hs1",""],
@@ -2992,7 +3022,7 @@ const WORD_DATA = [
 ["tone","名詞","口調、音色","toʊn","I didn't like his tone.","彼の口調が気に入らなかった。","アイディドゥンライキズトウン",[["like his","ライキズ","H"]],"hs1",""],
 ["tongue","名詞","舌","tʌŋ","I bit my tongue.","舌をかんだ。","アイビッマイタング",[["bit my","ビッマイ","D"]],"hs1",""],
 ["trade","名詞・動詞","貿易、取引する","treɪd","They trade with each other.","彼らはお互いに取引している。","ゼイチュレイッウィズィーチャザー",[["with each other","ウィズィーチャザー","L"]],"hs1 t500",""],
-["transfer","動詞・名詞","移す、乗り換え、転勤","trænsˈfɝː","I'll transfer you to the manager.","担当者におつなぎします。","アイォチュレァンスファーユータザメァニジャー",[["transfer you to the","チュレァンスファーユータザ","W"]],"hs1 t500",""],
+["transfer","動詞・名詞","移す、乗り換え、転勤","trænsˈfɝː","I'll transfer you to the manager.","担当者におつなぎします。","アイォチュレァンスファーユーラザメァニジャー",[["transfer you to the","チュレァンスファーユーラザ","F"]],"hs1 t500",""],
 ["transport","名詞・動詞","輸送、輸送する","ˈtrænspɔːrt","Public transport is convenient here.","ここは公共交通機関が便利だ。","パブリックチュレァンスポーリズカンヴィーニャン",[["transport is","チュレァンスポーリズ","F"]],"hs1 t500",""],
 ["treasure","名詞","宝物","ˈtreʒɚ","They found a hidden treasure.","彼らは隠された宝物を見つけた。","ゼイファウンダヒダンチュレジャー",[["found a hidden","ファウンダヒダン","L"]],"hs1",""],
 ["trend","名詞","傾向、流行","trend","What are the latest trends?","最新の流行は?","ワラーザレイリスチュレンズ",[["What are the","ワラーザ","F"]],"hs1 t500",""],
@@ -3002,7 +3032,7 @@ const WORD_DATA = [
 ["unit","名詞","単位、1つのまとまり","ˈjuːnɪt","This unit is about animals.","この単元は動物についてだ。","ディスユーニリザバウテァナモーズ",[["unit is about animals","ユーニリザバウテァナモーズ","F"]],"hs1 t500",""],
 ["unite","動詞","団結させる","juˈnaɪt","We must unite as a team.","チームとして団結しなければならない。","ウィマスユナイラザティーム",[["unite as a","ユナイラザ","F"]],"hs1",""],
 ["urban","形容詞","都市の","ˈɝːbən","I prefer urban life.","都会の生活のほうが好きだ。","アイプリファーラーバンライフ",[["prefer urban","プリファーラーバン","L"]],"hs1",""],
-["vary","動詞","さまざまである","ˈveri","Prices vary from store to store.","価格は店によって違う。","プライスィズヴェリーフラムストータストー",[["store to store","ストータストー","W"]],"hs1 t500",""],
+["vary","動詞","さまざまである","ˈveri","Prices vary from store to store.","価格は店によって違う。","プライスィズヴェリーフラムストーラストー",[["store to store","ストーラストー","F"]],"hs1 t500",""],
 ["vast","形容詞","広大な","væst","Russia is a vast country.","ロシアは広大な国だ。","ラシャリザヴェァスカンチュリー",[["Russia is a","ラシャリザ","L"]],"hs1",""],
 ["version","名詞","版、バージョン","ˈvɝːʒən","Download the latest version.","最新版をダウンロードして。","ダウンロウッザレイリスヴァージャン",[["latest version","レイリスヴァージャン","D"]],"hs1 t500",""],
 ["victim","名詞","犠牲者、被害者","ˈvɪktɪm","He was a victim of the accident.","彼はその事故の被害者だった。","ヒーワザヴィクティマヴジエァクサダン",[["victim of the","ヴィクティマヴジ","L"]],"hs1",""],
@@ -3087,7 +3117,7 @@ const WORD_DATA = [
 ["consume","動詞","消費する","kənˈsuːm","This car consumes a lot of fuel.","この車は燃料をたくさん使う。","ディスカーカンスームザラーラフューアォ",[["consumes a lot of","カンスームザラーラ","F"]],"hs2 t700",""],
 ["consumer","名詞","消費者","kənˈsuːmɚ","Consumers want lower prices.","消費者は安い価格を望んでいる。","カンスーマーズワンロウアープライスィズ",[["want lower","ワンロウアー","N"]],"hs2 t700",""],
 ["context","名詞","文脈、背景","ˈkɑːntekst","Guess the meaning from the context.","文脈から意味を推測して。","ゲスザミーニンフラムザカーンテクスッ",[["from the","フラムザ","H"]],"hs2",""],
-["contrary","形容詞・名詞","反対の、反対","ˈkɑːntreri","Contrary to my expectations, it was fun.","予想に反して楽しかった。","カーンチュレリータマイクスペクテイシャンズ、イッワズファン",[["Contrary to my","カーンチュレリータマイ","W"]],"hs2",""],
+["contrary","形容詞・名詞","反対の、反対","ˈkɑːntreri","Contrary to my expectations, it was fun.","予想に反して楽しかった。","カーンチュレリーラマイクスペクテイシャンズ、イッワズファン",[["Contrary to my","カーンチュレリーラマイ","F"]],"hs2",""],
 ["contrast","名詞・動詞","対照、対比する","ˈkɑːntræst","There is a sharp contrast between them.","両者は際立った対照をなしている。","ゼアリザシャープカーンチュレァスッビトゥウィーンゼム",[["There is a","ゼアリザ","L"]],"hs2",""],
 ["contribute","動詞","貢献する","kənˈtrɪbjuːt","Everyone contributed to the project.","全員がプロジェクトに貢献した。","エヴリワンカンチュリビューリッタザプラージェクッ",[["contributed to the","カンチュリビューリッタザ","G"]],"hs2 t700",""],
 ["convert","動詞","変える","kənˈvɝːt","Convert dollars into yen.","ドルを円に替えて。","カンヴァーッダーラーズィンタイェン",[["dollars into","ダーラーズィンタ","L"]],"hs2 t700",""],
@@ -3099,7 +3129,7 @@ const WORD_DATA = [
 ["crew","名詞","乗組員","kruː","The crew is on board.","乗組員は乗船している。","ザクルーイズォンボーッ",[["crew is on board","クルーイズォンボーッ","L"]],"hs2 t500",""],
 ["crisis","名詞","危機","ˈkraɪsɪs","The country is in crisis.","その国は危機にある。","ザカンチュリーイズィンクライスィス",[["country is in","カンチュリーイズィン","L"]],"hs2",""],
 ["critical","形容詞","批判的な、重大な","ˈkrɪt̬ɪkəl","This is a critical moment.","今が重大な時だ。","ディスィザクリリコーモウマン",[["This is a","ディスィザ","L"]],"hs2 t700",""],
-["curiosity","名詞","好奇心","ˌkjʊriˈɑːsət̬i","Curiosity is the key to learning.","好奇心は学びのかぎだ。","キュリアーサリーイズザキータラーニン",[["key to","キータ","W"]],"hs2",""],
+["curiosity","名詞","好奇心","ˌkjʊriˈɑːsət̬i","Curiosity is the key to learning.","好奇心は学びのかぎだ。","キュリアーサリーイズザキーララーニン",[["key to","キーラ","F"]],"hs2",""],
 ["currency","名詞","通貨","ˈkɝːənsi","What currency do they use?","どの通貨を使っていますか?","ワッカーランスィーダゼイユーズ",[["What currency","ワッカーランスィー","D"]],"hs2 t500",""],
 ["decline","動詞・名詞","断る、減少する、減少","dɪˈklaɪn","Sales declined last year.","昨年は売上が減少した。","セイォズディクラインッレァスチャー",[["last year","レァスチャー","Y"]],"hs2 t700",""],
 ["dedicate","動詞","捧げる","ˈdedɪkeɪt","She dedicated her life to music.","彼女は音楽に人生を捧げた。","シーデディケイリッハーライフタミューズィック",[["dedicated her","デディケイリッハー","F"]],"hs2",""],
@@ -3119,7 +3149,7 @@ const WORD_DATA = [
 ["donate","動詞","寄付する","ˈdoʊneɪt","I donated money to the hospital.","病院にお金を寄付した。","アイドウネイリッマニータザハスピロー",[["donated money","ドウネイリッマニー","F"]],"hs2 t500",""],
 ["draft","名詞・動詞","下書き、下書きする","dræft","Here is the first draft.","これが最初の下書きです。","ヒアリズザファースッジュレァフッ",[["Here is the","ヒアリズザ","L"]],"hs2 t700",""],
 ["dynamic","形容詞","活動的な","daɪˈnæmɪk","She is a dynamic leader.","彼女は精力的なリーダーだ。","シーザダイネァミックリーダー",[["She is a","シーザ","L"]],"hs2",""],
-["eager","形容詞","熱心な","ˈiːɡɚ","The students are eager to learn.","生徒たちは学ぶ意欲がある。","ザストゥーダンツァーリーガータラーン",[["students are eager to","ストゥーダンツァーリーガータ","L"]],"hs2",""],
+["eager","形容詞","熱心な","ˈiːɡɚ","The students are eager to learn.","生徒たちは学ぶ意欲がある。","ザストゥーダンツァーリーガーララーン",[["students are eager to","ストゥーダンツァーリーガーラ","L"]],"hs2",""],
 ["efficient","形容詞","効率的な","ɪˈfɪʃənt","This is an efficient way to work.","これは効率的な働き方だ。","ディスィザニフィシャンウェイタワーク",[["is an efficient","イザニフィシャン","L"]],"hs2 t700",""],
 ["elect","動詞","選出する","ɪˈlekt","She was elected president.","彼女は会長に選ばれた。","シーワズィレクティッドプレズィダン",[["was elected","ワズィレクティッ","L"]],"hs2",""],
 ["election","名詞","選挙","ɪˈlekʃən","Who won the election?","だれが選挙に勝ったの?","フーワンジイレクシャン",[["won the election","ワンジイレクシャン","L"]],"hs2",""],
@@ -3302,13 +3332,13 @@ const WORD_DATA = [
 ["suburb","名詞","郊外","ˈsʌbɝːb","I live in the suburbs.","郊外に住んでいる。","アイリヴィンザサバーブズ",[["live in the","リヴィンザ","L"]],"hs2 t500",""],
 ["sufficient","形容詞","十分な","səˈfɪʃənt","We have sufficient time.","時間は十分ある。","ウィハヴサフィシャンタイム",[["sufficient time","サフィシャンタイム","N"]],"hs2 t700",""],
 ["summit","名詞","頂上、首脳会談","ˈsʌmɪt","We reached the summit.","頂上に着いた。","ウィリーチッザサミッ",[["reached the","リーチッザ","D"]],"hs2",""],
-["superior","形容詞","優れた","suːˈpɪriɚ","This product is superior to that one.","この製品はあれより優れている。","ディスプラーダクティズスーピリアータザッワン",[["superior to","スーピリアータ","W"]],"hs2 t700",""],
+["superior","形容詞","優れた","suːˈpɪriɚ","This product is superior to that one.","この製品はあれより優れている。","ディスプラーダクティズスーピリアーラザッワン",[["superior to","スーピリアーラ","F"]],"hs2 t700",""],
 ["sustain","動詞","維持する","səˈsteɪn","We need to sustain growth.","成長を維持する必要がある。","ウィニーッタサステイングロウス",[["need to","ニーッタ","G"]],"hs2 t700",""],
 ["swallow","動詞","飲み込む","ˈswɑːloʊ","I can't swallow this pill.","この錠剤が飲み込めない。","アイキャンスワーロウディスピォ",[["can't swallow","キャンスワーロウ","N"]],"hs2",""],
 ["sympathy","名詞","同情","ˈsɪmpəθi","I have sympathy for him.","彼に同情している。","アイハヴスィンパスィーファヒム",[["sympathy for him","スィンパスィーファヒム","W"]],"hs2",""],
 ["symptom","名詞","症状","ˈsɪmptəm","What are your symptoms?","どんな症状ですか?","ワラーユアスィンプタムズ",[["What are your","ワラーユア","F"]],"hs2",""],
 ["tackle","動詞","取り組む","ˈtækəl","Let's tackle it together.","一緒に取り組もう。","レッツテァコーリッタゲザー",[["tackle it together","テァコーリッタゲザー","L"]],"hs2 t700",""],
-["tendency","名詞","傾向","ˈtendənsi","He has a tendency to be late.","彼は遅刻しがちだ。","ヒーハザテンダンスィータビーレイッ",[["has a tendency to","ハザテンダンスィータ","L"]],"hs2",""],
+["tendency","名詞","傾向","ˈtendənsi","He has a tendency to be late.","彼は遅刻しがちだ。","ヒーハザテンダンスィーラビーレイッ",[["has a tendency to","ハザテンダンスィーラ","L"]],"hs2",""],
 ["tense","形容詞","緊張した","tens","The atmosphere was tense.","雰囲気は張りつめていた。","ジエァッマスフィアワズテンス",[["The atmosphere","ジエァッマスフィア","L"]],"hs2",""],
 ["territory","名詞","領土、縄張り","ˈterətɔːri","This is our territory.","ここは私たちの縄張りだ。","ディスィザウアテラトーリー",[["This is our","ディスィザウア","L"]],"hs2",""],
 ["therapy","名詞","療法","ˈθerəpi","Music therapy is effective.","音楽療法は効果がある。","ミューズィックセラピーイズィフェクティヴ",[["therapy is effective","セラピーイズィフェクティヴ","L"]],"hs2",""],
@@ -3425,7 +3455,7 @@ const WORD_DATA = [
 ["diplomat","名詞","外交官","ˈdɪpləmæt","He works as a diplomat.","彼は外交官として働いている。","ヒーワークサザディプラメァッ",[["works as a","ワークサザ","L"]],"hs2",""],
 ["disabled","形容詞","障がいのある","dɪsˈeɪbəld","This room is for disabled guests.","この部屋は障がいのある方用です。","ディスルーミズファディセイボーッゲスツ",[["room is","ルーミズ","L"]],"hs2",""],
 ["disagree","動詞","意見が合わない","ˌdɪsəˈɡriː","I disagree with you.","あなたとは意見が違う。","アイディサグリーウィジュー",[["with you","ウィジュー","Y"]],"hs2",""],
-["discipline","名詞","規律","ˈdɪsəplɪn","It takes discipline to study every day.","毎日勉強するには自制心がいる。","イッテイクスディサプリンタスタディエヴリデイ",[["discipline to","ディサプリンタ","W"]],"hs2",""],
+["discipline","名詞","規律","ˈdɪsəplɪn","It takes discipline to study every day.","毎日勉強するには自制心がいる。","イッテイクスディサプリンヌスタディエヴリデイ",[["discipline to","ディサプリンヌ","W"]],"hs2",""],
 ["discourage","動詞","やる気をなくさせる","dɪsˈkɝːɪdʒ","Don't be discouraged.","がっかりしないで。","ドンビーディスカーリッジッ",[["Don't be","ドンビー","N"]],"hs2",""],
 ["distract","動詞","気をそらす","dɪˈstrækt","Don't distract me.","気を散らさないで。","ドンディスチュレァクッミー",[["distract me","ディスチュレァクッミー","D"]],"hs2",""],
 ["disturb","動詞","邪魔する","dɪˈstɝːb","Please do not disturb.","起こさないでください。","プリーズドゥーナッディスターブ",[["not disturb","ナッディスターブ","D"]],"hs2 t500",""],
@@ -3599,7 +3629,7 @@ const WORD_DATA = [
 ["rob","動詞","奪う","rɑːb","He robbed a bank.","彼は銀行強盗をした。","ヒーラーブダベァンク",[["robbed a bank","ラーブダベァンク","L"]],"hs2",""],
 ["rocket","名詞","ロケット","ˈrɑːkɪt","The rocket went into space.","ロケットは宇宙へ飛んだ。","ザラーキッウェニンタスペイス",[["went into","ウェニンタ","N"]],"hs1",""],
 ["romantic","形容詞","ロマンチックな","roʊˈmæntɪk","It was a romantic dinner.","ロマンチックな夕食だった。","イッワザロウメァンティックディナー",[["was a","ワザ","L"]],"hs1",""],
-["rope","名詞","ロープ","roʊp","Hold on to the rope.","ロープにつかまって。","ホウォダーンタザロウプ",[["Hold on to the","ホウォダーンタザ","L"]],"hs1",""],
+["rope","名詞","ロープ","roʊp","Hold on to the rope.","ロープにつかまって。","ホウォダーンヌザロウプ",[["Hold on to the","ホウォダーンヌザ","L"]],"hs1",""],
 ["royal","形容詞","王室の","ˈrɔɪəl","It's a royal palace.","それは王宮だ。","イッツァロイアォペァラス",[["It's a","イッツァ","L"]],"hs2",""],
 ["scan","動詞","ざっと見る、スキャンする","skæn","Scan the QR code.","QRコードを読み取って。","スキャンザキューアーコウッ",[["Scan the","スキャンザ","H"]],"hs2 t500",""],
 ["scream","動詞・名詞","悲鳴を上げる、悲鳴","skriːm","She screamed in fear.","彼女は恐怖で叫んだ。","シースクリームディンフィア",[["screamed in","スクリームディン","L"]],"hs2",""],
@@ -3724,7 +3754,7 @@ const WORD_DATA = [
 ["cherry","名詞","さくらんぼ","ˈtʃeri","Cherry blossoms are beautiful.","桜の花は美しい。","チェリーブラーサムザービューリフォー",[["blossoms are","ブラーサムザー","L"]],"hs1",""],
 ["chip","名詞","かけら、ポテトチップ","tʃɪp","I ate a bag of chips.","ポテトチップスを1袋食べた。","アイエイラベァガヴチップス",[["bag of chips","ベァガヴチップス","L"]],"hs2",""],
 ["chop","動詞","切り刻む","tʃɑːp","Chop the onions.","玉ねぎを刻んで。","チャーップジアニャンズ",[["Chop the onions","チャーップジアニャンズ","L"]],"hs2",""],
-["cinema","名詞","映画館","ˈsɪnəmə","Let's go to the cinema.","映画館に行こう。","レッツゴウタザスィナマ",[["go to the","ゴウタザ","W"]],"hs2",""],
+["cinema","名詞","映画館","ˈsɪnəmə","Let's go to the cinema.","映画館に行こう。","レッツゴウラザスィナマ",[["go to the","ゴウラザ","F"]],"hs2",""],
 ["circus","名詞","サーカス","ˈsɝːkəs","We went to the circus.","サーカスに行った。","ウィウェンタザサーカス",[["went to the","ウェンタザ","N"]],"hs2",""],
 ["click","動詞","クリックする","klɪk","Click on the icon.","アイコンをクリックして。","クリッコンジアイカーン",[["Click on the icon","クリッコンジアイカーン","L"]],"hs1 t500",""],
 ["closet","名詞","押し入れ、クローゼット","ˈklɑːzɪt","Put your clothes in the closet.","服をクローゼットにしまって。","プッチュアクロウズィンザクラーズィッ",[["Put your","プッチュア","Y"]],"hs2",""],
@@ -3796,7 +3826,7 @@ const WORD_DATA = [
 ["intervene","動詞","介入する","ˌɪnt̬ɚˈviːn","The teacher intervened in the fight.","先生がけんかに割って入った。","ザティーチャーリナーヴィーンディンザファイッ",[["intervened in the","イナーヴィーンディンザ","L"]],"hs3",""],
 ["legislation","名詞","法律制定、法律","ˌledʒɪˈsleɪʃən","The legislation is new.","その法律は新しい。","ザレジスレイシャニズヌー",[["legislation is","レジスレイシャニズ","L"]],"hs3 t900",""],
 ["legitimate","形容詞","合法の、正当な","ləˈdʒɪt̬əmət","Is it a legitimate business?","それは合法的な商売?","イズィラリジラマッビズナス",[["Is it a","イズィラ","F"]],"hs3 t900",""],
-["manipulate","動詞","操作する","məˈnɪpjəleɪt","Don't try to manipulate me.","私を操ろうとしないで。","ドンチュライタマニピャレイッミー",[["try to","チュライタ","W"]],"hs3",""],
+["manipulate","動詞","操作する","məˈnɪpjəleɪt","Don't try to manipulate me.","私を操ろうとしないで。","ドンチュライラマニピャレイッミー",[["try to","チュライラ","F"]],"hs3",""],
 ["merge","動詞","合併する","mɝːdʒ","The two companies merged into one.","2社が1つに合併した。","ザトゥーカンパニーズマージディンタワン",[["merged into one","マージディンタワン","L"]],"hs3 t700",""],
 ["migrate","動詞","移住する","ˈmaɪɡreɪt","Birds migrate south in winter.","鳥は冬に南へ渡る。","バーズマイグレイッサウスィンウィナー",[["south in","サウスィン","L"]],"hs3",""],
 ["minimize","動詞","最小限にする","ˈmɪnəmaɪz","We must minimize the risk.","リスクを最小限にしなければならない。","ウィマスミナマイズザリスク",[["minimize the","ミナマイズザ","H"]],"hs3 t700",""],
@@ -3821,7 +3851,7 @@ const WORD_DATA = [
 ["simulate","動詞","模擬実験する","ˈsɪmjəleɪt","We simulated an earthquake.","地震を模擬的に再現した。","ウィスィミャレイリダナースクウェイク",[["simulated an earthquake","スィミャレイリダナースクウェイク","F"]],"hs3",""],
 ["sole","形容詞","唯一の","soʊl","He is the sole survivor.","彼は唯一の生存者だ。","ヒーズザソウォサーヴァイヴァー",[["He is","ヒーズ","L"]],"hs3",""],
 ["specify","動詞","具体的に述べる","ˈspesəfaɪ","Specify it in the form.","用紙に具体的に書いてください。","スペサファイイリンザフォーム",[["Specify it in the","スペサファイイリンザ","F"]],"hs3 t700",""],
-["speculate","動詞","推測する","ˈspekjəleɪt","It's too early to speculate.","推測するにはまだ早い。","イッツトゥーアーリータスペキャレイッ",[["early to","アーリータ","W"]],"hs3",""],
+["speculate","動詞","推測する","ˈspekjəleɪt","It's too early to speculate.","推測するにはまだ早い。","イッツトゥーアーリーラスペキャレイッ",[["early to","アーリーラ","F"]],"hs3",""],
 ["spontaneous","形容詞","自発的な","spɑːnˈteɪniəs","It was a spontaneous decision.","とっさの決断だった。","イッワザスパーンテイニアスディスィジャン",[["was a","ワザ","L"]],"hs3",""],
 ["subsequent","形容詞","その後の","ˈsʌbsəkwənt","Subsequent events proved him right.","その後の出来事で彼が正しかったとわかった。","サブサクワンティヴェンツプルーヴディムライッ",[["Subsequent events","サブサクワンティヴェンツ","L"]],"hs3 t900",""],
 ["subsidy","名詞","補助金","ˈsʌbsədi","They get a subsidy from the city.","彼らは市から補助金を受けている。","ゼイゲラサブサディーフラムザスィリー",[["get a subsidy","ゲラサブサディー","F"]],"hs3 t900",""],
@@ -3998,7 +4028,7 @@ const WORD_DATA = [
 ["conventional","形容詞","従来の","kənˈvenʃənəl","It's a conventional method.","それは従来の方法だ。","イッツァカンヴェンシャノーメサッ",[["It's a","イッツァ","L"]],"hs3 t700",""],
 ["coordinate","動詞","調整する","koʊˈɔːrdəneɪt","She coordinates the events.","彼女がイベントの調整をしている。","シーコウオーダネイツジイヴェンツ",[["coordinates the events","コウオーダネイツジイヴェンツ","L"]],"hs3 t700",""],
 ["deficiency","名詞","不足","dɪˈfɪʃənsi","He has a vitamin deficiency.","彼はビタミン不足だ。","ヒーハザヴァイラミンディフィシャンスィー",[["has a","ハザ","L"]],"hs3",""],
-["delegate","名詞・動詞","代表、任せる","ˈdeləɡət","Learn to delegate tasks.","仕事を任せることを覚えて。","ラーンタデラゲイッテァスクス",[["Learn to","ラーンタ","N"]],"hs3 t700",""],
+["delegate","名詞・動詞","代表、任せる","ˈdeləɡət","Learn to delegate tasks.","仕事を任せることを覚えて。","ラーンヌデラゲイッテァスクス",[["Learn to","ラーンヌ","N"]],"hs3 t700",""],
 ["deprive","動詞","奪う","dɪˈpraɪv","Stress deprives us of sleep.","ストレスは私たちから睡眠を奪う。","スチュレスディプライヴザサヴスリープ",[["deprives us of","ディプライヴザサヴ","L"]],"hs3",""],
 ["devise","動詞","考案する","dɪˈvaɪz","They devised a new plan.","彼らは新しい計画を考案した。","ゼイディヴァイズダヌープレァン",[["devised a new","ディヴァイズダヌー","L"]],"hs3",""],
 ["dictate","動詞","指図する、口述する","ˈdɪkteɪt","Don't let fear dictate your life.","恐れに人生を支配させないで。","ドンレッフィアディクテイチュアライフ",[["dictate your","ディクテイチュア","Y"]],"hs3",""],
@@ -4047,7 +4077,7 @@ const WORD_DATA = [
 ["momentum","名詞","勢い","moʊˈment̬əm","We are gaining momentum.","勢いがついてきた。","ウィアーゲイニンモウメナム",[["gaining momentum","ゲイニンモウメナム","G"]],"hs3 t700",""],
 ["monopoly","名詞","独占","məˈnɑːpəli","The company has a monopoly.","その会社は市場を独占している。","ザカンパニーハザマナーパリー",[["has a","ハザ","L"]],"hs3 t900",""],
 ["notable","形容詞","注目すべき","ˈnoʊt̬əbəl","It's a notable achievement.","それは注目すべき業績だ。","イッツァノウラボーラチーヴマン",[["notable achievement","ノウラボーラチーヴマン","L"]],"hs3 t700",""],
-["nuance","名詞","微妙な違い","ˈnuːɑːns","Pay attention to the nuance.","ニュアンスに注意して。","ペイアテンシャンタザヌーアーンス",[["attention to the","アテンシャンタザ","W"]],"hs3",""],
+["nuance","名詞","微妙な違い","ˈnuːɑːns","Pay attention to the nuance.","ニュアンスに注意して。","ペイアテンシャンヌザヌーアーンス",[["attention to the","アテンシャンヌザ","W"]],"hs3",""],
 ["obscure","形容詞","わかりにくい、無名の","əbˈskjʊr","The meaning is obscure.","意味がわかりにくい。","ザミーニンギザブスキュア",[["meaning is obscure","ミーニンギザブスキュア","L"]],"hs3",""],
 ["obsolete","形容詞","時代遅れの","ˌɑːbsəˈliːt","This technology is obsolete.","この技術は時代遅れだ。","ディステクナーラジーイザブサリーッ",[["is obsolete","イザブサリーッ","L"]],"hs3 t900",""],
 ["optimal","形容詞","最適な","ˈɑːptəməl","What's the optimal solution?","最適な解決策は何?","ワッツジアープタモーサルーシャン",[["the optimal","ジアープタモー","L"]],"hs3 t900",""],
@@ -4129,7 +4159,7 @@ const WORD_DATA = [
 ["crude","形容詞","粗野な、未加工の","kruːd","The price of crude oil went up.","原油価格が上がった。","ザプライサヴクルードイォウェンタップ",[["crude oil","クルードイォ","L"]],"hs3",""],
 ["curb","動詞・名詞","抑制する、縁石","kɝːb","We must curb spending.","支出を抑えなければならない。","ウィマスカーブスペンディン",[["must curb","マスカーブ","D"]],"hs3 t900",""],
 ["curriculum","名詞","教育課程","kəˈrɪkjələm","The school changed its curriculum.","学校はカリキュラムを変えた。","ザスクーォチェインジディッツカリキャラム",[["changed its","チェインジディッツ","L"]],"hs3",""],
-["decay","動詞・名詞","腐る、虫歯","dɪˈkeɪ","The wood began to decay.","木が腐り始めた。","ザウッビギャンタディケイ",[["began to","ビギャンタ","N"]],"hs3",""],
+["decay","動詞・名詞","腐る、虫歯","dɪˈkeɪ","The wood began to decay.","木が腐り始めた。","ザウッビギャンヌディケイ",[["began to","ビギャンヌ","N"]],"hs3",""],
 ["deceive","動詞","だます","dɪˈsiːv","Don't let him deceive you.","彼にだまされないで。","ドンレッヒムディスィーヴュー",[["deceive you","ディスィーヴュー","L"]],"hs3",""],
 ["decisive","形容詞","決定的な、決断力のある","dɪˈsaɪsɪv","She is a decisive leader.","彼女は決断力のあるリーダーだ。","シーザディサイスィヴリーダー",[["She is a","シーザ","L"]],"hs3 t700",""],
 ["deficit","名詞","赤字","ˈdefəsɪt","The company has a large deficit.","その会社は大きな赤字を抱えている。","ザカンパニーハザラージデファスィッ",[["has a","ハザ","L"]],"hs3 t900",""],
@@ -4227,7 +4257,7 @@ const WORD_DATA = [
 ["ponder","動詞","熟考する","ˈpɑːndɚ","I pondered the question.","その問題をじっくり考えた。","アイパーンダーッザクウェスチャン",[["pondered the","パーンダーッザ","D"]],"hs3",""],
 ["precaution","名詞","用心、予防策","prɪˈkɔːʃən","Take precautions against fire.","火事に用心して。","テイクプリコーシャンザゲンスッファイアー",[["precautions against","プリコーシャンザゲンスッ","L"]],"hs3 t700",""],
 ["predecessor","名詞","前任者","ˈpredəsesɚ","She replaced her predecessor.","彼女は前任者の後を継いだ。","シーリプレイスッハープレダセサー",[["replaced her","リプレイスッハー","D"]],"hs3 t900",""],
-["premature","形容詞","時期尚早の","ˌpriːməˈtʃʊr","It's premature to decide.","決めるのは時期尚早だ。","イッツプリーマチュアタディサイッ",[["premature to","プリーマチュアタ","W"]],"hs3",""],
+["premature","形容詞","時期尚早の","ˌpriːməˈtʃʊr","It's premature to decide.","決めるのは時期尚早だ。","イッツプリーマチュアラディサイッ",[["premature to","プリーマチュアラ","F"]],"hs3",""],
 ["prescribe","動詞","処方する","prɪˈskraɪb","The doctor prescribed some medicine.","医者が薬を処方した。","ザダークタープリスクライブッサムメダサン",[["prescribed some","プリスクライブッサム","D"]],"hs3",""],
 ["prestige","名詞","威信","preˈstiːʒ","The university has great prestige.","その大学は名声が高い。","ザユーナヴァーサリーハズグレイップレスティージ",[["great prestige","グレイップレスティージ","D"]],"hs3",""],
 ["presumably","副詞","おそらく","prɪˈzuːməbli","Presumably, he's at home.","おそらく彼は家にいる。","プリズーマブリー、ヒーザッホウム",[["he's at home","ヒーザッホウム","L"]],"hs3",""],
@@ -4235,7 +4265,7 @@ const WORD_DATA = [
 ["proclaim","動詞","宣言する","proʊˈkleɪm","They proclaimed independence.","彼らは独立を宣言した。","ゼイプロウクレイムディンディペンダンス",[["proclaimed independence","プロウクレイムディンディペンダンス","L"]],"hs3",""],
 ["procrastinate","動詞","先延ばしにする","proʊˈkræstəneɪt","Stop procrastinating.","先延ばしにするのはやめて。","スタップロウクレァスタネイリン",[["Stop procrastinating","スタップロウクレァスタネイリン","G"]],"hs3",""],
 ["prolong","動詞","長引かせる","prəˈlɔːŋ","Don't prolong the meeting.","会議を長引かせないで。","ドンプラローングザミーリン",[["Don't prolong","ドンプラローング","N"]],"hs3 t700",""],
-["prone","形容詞","〜しがちな","proʊn","He is prone to catching colds.","彼はかぜをひきやすい。","ヒーズプロウンタキャッチンコウォズ",[["prone to","プロウンタ","W"]],"hs3",""],
+["prone","形容詞","〜しがちな","proʊn","He is prone to catching colds.","彼はかぜをひきやすい。","ヒーズプロウンヌキャッチンコウォズ",[["prone to","プロウンヌ","W"]],"hs3",""],
 ["prosperity","名詞","繁栄","prɑːˈsperət̬i","We wish you health and prosperity.","ご健康とご繁栄をお祈りします。","ウィウィッシュヘォスァンプラースペラリー",[["health and","ヘォスァン","W"]],"hs3",""],
 ["prudent","形容詞","慎重な","ˈpruːdənt","It would be prudent to wait.","待つのが賢明だろう。","イッウッビープルーダンタウェイッ",[["prudent to wait","プルーダンタウェイッ","N"]],"hs3",""],
 ["punctual","形容詞","時間を守る","ˈpʌŋktʃuəl","He is always punctual.","彼はいつも時間どおりだ。","ヒーズォーォウェイズパンクチュアォ",[["He is always","ヒーズォーォウェイズ","L"]],"hs3 t500",""],
@@ -4579,7 +4609,7 @@ const WORD_DATA = [
 ["plumber","名詞","配管工","ˈplʌmɚ","We called a plumber.","配管工を呼んだ。","ウィコーォダプラマー",[["called a plumber","コーォダプラマー","L"]],"t700",""],
 ["portfolio","名詞","作品集、資産構成","pɔːrtˈfoʊlioʊ","Please bring your portfolio.","作品集を持ってきてください。","プリーズブリンギュアポーッフォウリオウ",[["bring your","ブリンギュア","L"]],"t900",""],
 ["procedure","名詞","手順","prəˈsiːdʒɚ","Follow the procedure in the manual.","マニュアルの手順に従って。","ファーロウザプラスィージャーリンザメァニュアォ",[["procedure in the","プラスィージャーリンザ","L"]],"t700 hs2",""],
-["proceeds","名詞","収益金","ˈproʊsiːdz","All proceeds go to charity.","収益はすべて寄付されます。","オーォプロウスィーズゴウタチェラリー",[["go to charity","ゴウタチェラリー","W"]],"t900",""],
+["proceeds","名詞","収益金","ˈproʊsiːdz","All proceeds go to charity.","収益はすべて寄付されます。","オーォプロウスィーズゴウラチェラリー",[["go to charity","ゴウラチェラリー","F"]],"t900",""],
 ["procurement","名詞","調達","proʊˈkjʊrmənt","She is in charge of procurement.","彼女は調達担当だ。","シーズィンチャージャヴプロウキュアマン",[["in charge of","インチャージャヴ","L"]],"t900",""],
 ["productivity","名詞","生産性","ˌproʊdʌkˈtɪvət̬i","We need to increase productivity.","生産性を上げる必要がある。","ウィニーッタインクリースプロウダクティヴァリー",[["need to","ニーッタ","G"]],"t700",""],
 ["proficiency","名詞","熟達","prəˈfɪʃənsi","English proficiency is required.","英語力が必要です。","イングリッシュプラフィシャンスィーイズリクワイアーッ",[["proficiency is required","プラフィシャンスィーイズリクワイアーッ","L"]],"t700",""],
@@ -4662,7 +4692,7 @@ const WORD_DATA = [
 ["free of charge","熟語","無料で","ˌfriː əv ˈtʃɑːrdʒ","Parking is free of charge.","駐車場は無料です。","パーキンギズフリーアヴチャージ",[["free of charge","フリーアヴチャージ","L"]],"t500 id2",""],
 ["in the event of","熟語","〜の場合には","ɪn ði ɪˈvent əv","In the event of rain, the event will be canceled.","雨天の場合、イベントは中止です。","インジイヴェンタヴレイン、ジイヴェンウィォビーキャンソーッ",[["event of rain","イヴェンタヴレイン","N"]],"t900 id3","インジイヴェンタヴ"],
 ["out of print","熟語","絶版の","ˌaʊt̬ əv ˈprɪnt","That book is out of print.","その本は絶版だ。","ザッブッキザウラヴプリン",[["book is out of print","ブッキザウラヴプリン","F"]],"t900 id3",""],
-["prior to","熟語","〜より前に","ˈpraɪɚ tə","Please arrive prior to 9 a.m.","午前9時より前にお越しください。","プリーザライヴプライアータナインエイエム",[["prior to","プライアータ","W"]],"t900 id3",""],
+["prior to","熟語","〜より前に","ˈpraɪɚ tə","Please arrive prior to 9 a.m.","午前9時より前にお越しください。","プリーザライヴプライアーラナインエイエム",[["prior to","プライアーラ","F"]],"t900 id3",""],
 ["with regard to","熟語","〜に関して","wɪð rɪˈɡɑːrd tə","With regard to your question, here is the answer.","ご質問に関して、回答はこちらです。","ウィズリガーッタユアクウェスチャン、ヒアリズジエァンサー",[["regard to your","リガーッタユア","W"]],"t900 id3",""],
 ["on the premises","熟語","構内で","ɑːn ðə ˈpremɪsɪz","Smoking is not allowed on the premises.","構内は禁煙です。","スモウキンギズナララウドンザプレミスィズ",[["allowed on the premises","アラウドンザプレミスィズ","L"]],"t900 id3",""],
 ["take inventory","熟語","在庫を調べる","ˌteɪk ˈɪnvəntɔːri","We take inventory once a month.","月1回棚卸しをしている。","ウィテイキンヴァントーリーワンサマンス",[["take inventory","テイキンヴァントーリー","L"]],"t700 id2",""],
@@ -4839,7 +4869,7 @@ const WORD_DATA = [
 ["accessory","名詞","付属品","əkˈsesəri","We sell phone accessories.","電話のアクセサリーを販売している。","ウィセォフォウナクセサリーズ",[["phone accessories","フォウナクセサリーズ","L"]],"t700",""],
 ["accolade","名詞","称賛","ˈækəleɪd","The film received many accolades.","その映画は多くの称賛を受けた。","ザフィォムリスィーヴッメニエァカレイズ",[["many accolades","メニエァカレイズ","L"]],"t900",""],
 ["acquaint","動詞","精通させる","əˈkweɪnt","Please acquaint yourself with the rules.","規則をよく知っておいてください。","プリーズアクウェインチュアセォフウィズザルーォズ",[["acquaint yourself","アクウェインチュアセォフ","Y"]],"t900",""],
-["adhere","動詞","守る","ədˈhɪr","Please adhere to the rules.","規則を守ってください。","プリーズアッヒアタザルーォズ",[["adhere to the","アッヒアタザ","W"]],"t900 hs3","アッヒア"],
+["adhere","動詞","守る","ədˈhɪr","Please adhere to the rules.","規則を守ってください。","プリーズアッヒアラザルーォズ",[["adhere to the","アッヒアラザ","F"]],"t900 hs3","アッヒア"],
 ["adept","形容詞","熟達した","əˈdept","She is adept at negotiating.","彼女は交渉が上手だ。","シーズァデプタッニゴウシエイリン",[["adept at","アデプタッ","L"]],"t900",""],
 ["affordable","形容詞","手ごろな","əˈfɔːrdəbəl","The prices are affordable.","価格が手ごろだ。","ザプライスィザーラフォーダボー",[["prices are affordable","プライスィザーラフォーダボー","L"]],"t500",""],
 ["annotate","動詞","注釈をつける","ˈænəteɪt","Please annotate the document.","書類に注釈をつけてください。","プリーゼァナテイッザダーキャマン",[["Please annotate","プリーゼァナテイッ","L"]],"t900",""],
@@ -4872,7 +4902,7 @@ const WORD_DATA = [
 ["hazardous","形容詞","危険な","ˈhæzɚdəs","It's hazardous to your health.","それは健康に有害だ。","イッツヘァザーダスタユアヘォス",[["hazardous to your","ヘァザーダスタユア","W"]],"t700",""],
 ["heighten","動詞","高める","ˈhaɪtən","The news heightened our concern.","その知らせで不安が高まった。","ザヌーズハイッンダウアカンサーン",[["heightened our","ハイッンダウア","L"]],"t900","ハイッン"],
 ["impending","形容詞","差し迫った","ɪmˈpendɪŋ","We prepared for the impending storm.","迫る嵐に備えた。","ウィプリペアーッファジインペンディンストーム",[["for the impending","ファジインペンディン","L"]],"t900",""],
-["inclement","形容詞","荒れ模様の","ɪnˈklemənt","The game was canceled due to inclement weather.","悪天候のため試合は中止になった。","ザゲイムワズキャンソーッドゥータインクレマンウェザー",[["due to inclement","ドゥータインクレマン","W"]],"t900",""],
+["inclement","形容詞","荒れ模様の","ɪnˈklemənt","The game was canceled due to inclement weather.","悪天候のため試合は中止になった。","ザゲイムワズキャンソーッドゥーラインクレマンウェザー",[["due to inclement","ドゥーラインクレマン","F"]],"t900",""],
 ["insulate","動詞","断熱する","ˈɪnsəleɪt","The walls are well insulated.","壁は断熱がしっかりしている。","ザウォーォザーウェリンサレイリッ",[["well insulated","ウェリンサレイリッ","L"]],"t900",""],
 ["integral","形容詞","不可欠な","ˈɪnt̬əɡrəl","She is an integral part of the team.","彼女はチームに欠かせない存在だ。","シーズァニナグラォパーラヴザティーム",[["an integral part of the","アニナグラォパーラヴザ","L"]],"t900",""],
 ["latter","名詞・形容詞","後者(の)","ˈlæt̬ɚ","I prefer the latter.","後者のほうがいい。","アイプリファーザレァラー",[["latter","レァラー","F"]],"t700",""],
@@ -4988,7 +5018,7 @@ const WORD_DATA = [
 ["culinary","形容詞","料理の","ˈkʌlɪneri","He went to culinary school.","彼は料理学校に通った。","ヒーウェンタカリネリースクーォ",[["went to","ウェンタ","N"]],"t900",""],
 ["cumulative","形容詞","累積の","ˈkjuːmjələt̬ɪv","The cumulative effect was large.","累積の効果は大きかった。","ザキューミャラリヴィフェクッワズラージ",[["cumulative effect","キューミャラリヴィフェクッ","L"]],"t900",""],
 ["curator","名詞","学芸員","ˈkjʊreɪt̬ɚ","The curator explained the paintings.","学芸員が絵を説明した。","ザキュレイラーリクスプレインッザペイニンズ",[["curator explained","キュレイラーリクスプレインッ","L"]],"t900",""],
-["customary","形容詞","慣習的な","ˈkʌstəmeri","It's customary to tip here.","ここではチップを渡すのが慣習だ。","イッツカスタメリータティップヒア",[["customary to","カスタメリータ","W"]],"t900",""],
+["customary","形容詞","慣習的な","ˈkʌstəmeri","It's customary to tip here.","ここではチップを渡すのが慣習だ。","イッツカスタメリーラティップヒア",[["customary to","カスタメリーラ","F"]],"t900",""],
 ["cutting-edge","形容詞","最先端の","ˌkʌt̬ɪŋ ˈedʒ","We use cutting-edge technology.","最先端の技術を使っている。","ウィユーズカリンゲッジテクナーラジー",[["cutting-edge","カリンゲッジ","F"]],"t900","カリンゲッジ"],
 ["dedicated","形容詞","献身的な、専用の","ˈdedɪkeɪt̬ɪd","She is a dedicated teacher.","彼女は献身的な教師だ。","シーザデディケイリッティーチャー",[["She is a","シーザ","L"]],"t700",""],
 ["deliberation","名詞","熟考","dɪˌlɪbəˈreɪʃən","After a lot of deliberation, we agreed.","熟考の末、合意した。","エァフタラーラヴディリバレイシャン、ウィアグリーッ",[["After a lot of","エァフタラーラヴ","F"]],"t900",""],
@@ -5102,7 +5132,7 @@ const WORD_DATA = [
 ["unattended","形容詞","放置された","ˌʌnəˈtendɪd","Don't leave your bag unattended.","かばんを放置しないで。","ドンリーヴュアベァガナテンディッ",[["bag unattended","ベァガナテンディッ","L"]],"t900",""],
 ["understaffed","形容詞","人手不足の","ˌʌndɚˈstæft","We are understaffed today.","今日は人手不足だ。","ウィアーランダーステァフッタデイ",[["are understaffed","アーランダーステァフッ","L"]],"t900",""],
 ["undertake","動詞","引き受ける","ˌʌndɚˈteɪk","We undertook a big project.","大きなプロジェクトを引き受けた。","ウィアンダートゥッカビッグプラージェクッ",[["undertook a big","アンダートゥッカビッグ","L"]],"t900",""],
-["unforeseen","形容詞","予期しない","ˌʌnfɔːrˈsiːn","Due to unforeseen circumstances, we closed.","予期せぬ事情により閉店しました。","ドゥータアンフォースィーンサーカムステァンスィズ、ウィクロウズッ",[["Due to unforeseen","ドゥータアンフォースィーン","W"]],"t900",""],
+["unforeseen","形容詞","予期しない","ˌʌnfɔːrˈsiːn","Due to unforeseen circumstances, we closed.","予期せぬ事情により閉店しました。","ドゥーラアンフォースィーンサーカムステァンスィズ、ウィクロウズッ",[["Due to unforeseen","ドゥーラアンフォースィーン","F"]],"t900",""],
 ["unparalleled","形容詞","比類のない","ʌnˈperəleld","The view is unparalleled.","景色は比類がない。","ザヴューイザンペラレォッ",[["view is unparalleled","ヴューイザンペラレォッ","L"]],"t900",""],
 ["utmost","形容詞・名詞","最大限(の)","ˈʌtmoʊst","We will do our utmost.","全力を尽くします。","ウィウィォドゥーアウアラッモウスッ",[["our utmost","アウアラッモウスッ","L"]],"t900",""],
 ["vicinity","名詞","付近","vɪˈsɪnət̬i","Is there a bank in the vicinity?","この付近に銀行はありますか?","イズゼアラベァンキンザヴィスィナリー",[["bank in the","ベァンキンザ","L"]],"t900",""],
@@ -5158,8 +5188,48 @@ const KANA = (() => {
     return [res, stressed];
   }
   const isV = x => !!(x && V[x]);
+  const GLIDE_R = new Set(["r"]);
+  const WEAK = new Set(["ə","ɚ","ɪ","i"]);                 // 強勢のない弱い母音
+  const WEAK_H = ["ɪm","ɚ","ɝː","ɪz","æv","əv","æz","əz","æd","əd","iː","i"];  // him her his have has had he の弱い形
+  /* 音の変化を発音記号から自動で判断する(フラッピング・nのあとのt・弱いh) */
+  function autoRules(t, stressed){
+    const n=t.length, drop=new Set(), uv=new Set();
+    const wordEnd = i => { let j=i+1; while(j<n && !wb.has(j)) j++; return j; };
+    for(let i=0;i<n;i++){
+      const x=t[i], prev=t[i-1], nx=t[i+1], nx2=t[i+2];
+      // 弱い h の脱落:文の途中の him/her/his/have など(tell him, ask her)
+      if(x==="h" && i>0 && wb.has(i) && !stressed.has(i+1)){
+        const rest = t.slice(i+1, wordEnd(i)).join("");
+        if(WEAK_H.includes(rest)) drop.add(i);
+        continue;
+      }
+      if(x!=="t") continue;
+      // 弱い to(tə)の前が母音・r:t がフラップしてラになる(go to bed, way to the)
+      if(wb.has(i) && nx==="ə" && !stressed.has(i+1) && (isV(prev) || prev==="r")){ t[i]="t̬"; continue; }
+      // n のあとの弱い to:t が消え、弱い母音はヌに近く聞こえる(listen to me)
+      if(wb.has(i) && prev==="n" && nx==="ə" && !stressed.has(i+1) && !(nx2==="n")){ drop.add(i); uv.add(i+1); continue; }
+      const crossWord = wb.has(i+1) || (wb.has(i) && nx==="ə" && !stressed.has(i+1));   // count on / listen to(in time は対象外)
+      // n のあとの t:弱い母音の前(twenty, dentist)や単語の切れ目(listen to, count on)で消える
+      if(prev==="n" && isV(nx) && !(nx==="ə" && nx2==="n") && (crossWord || (WEAK.has(nx) && !stressed.has(i+1)))){ drop.add(i); continue; }
+      // フラッピング:母音(または母音+r)と母音にはさまれた t
+      const afterVowel = isV(prev) || (GLIDE_R.has(prev) && isV(t[i-2]));
+      if(!afterVowel || !isV(nx)) continue;
+      if(nx==="ə" && nx2==="n" && !wb.has(i+1)) continue;          // button, certainly はフラップしない
+      if(wb.has(i+1)) { t[i]="t̬"; continue; }                        // 単語をまたぐ(get up, not at all)
+      if(!wb.has(i) && WEAK.has(nx) && !stressed.has(i+1)) t[i]="t̬"; // 単語の中:後ろが弱い母音(water, thirty)
+    }
+    return [drop, uv];
+  }
   function convert(ipa){
-    const [t, stressed] = tokens(ipa); const n=t.length; const out=[]; let i=0;
+    const [t0, stressed0] = tokens(ipa);
+    const [drop, uv0] = autoRules(t0, stressed0);
+    const uv = new Set();
+    // 脱落する音を取り除き、位置情報を詰め直す
+    const t=[], stressed=new Set(), wb2=new Set(), bound2=new Set();
+    t0.forEach((x,i)=>{ if(drop.has(i)){ if(wb.has(i)) wb2.add(t.length); if(bound.has(i)) bound2.add(t.length); return; }
+      if(stressed0.has(i)) stressed.add(t.length); if(uv0.has(i)) uv.add(t.length); if(wb.has(i)) wb2.add(t.length); if(bound.has(i)) bound2.add(t.length); t.push(x); });
+    wb.clear(); wb2.forEach(v=>wb.add(v)); bound.clear(); bound2.forEach(v=>bound.add(v));
+    const n=t.length; const out=[]; let i=0;
     const nvow = t.filter(isV).length;
     // 母音のうしろにつける文字(のばす、r の色、語末の i)
     function suffix(v, idx){
@@ -5192,7 +5262,11 @@ const KANA = (() => {
         out.push((YI[x]||C[x].i)+SMALL[base]+suf); i+=3; continue;
       }
       if(isV(nx) && C[x]){
-        const base=V[nx][0]; let suf=suffix(nx,i+1); let kana;
+        // s・z・f・v のあとの語末の弱い「ən」は「スン」「ズン」「フン」「ヴン」に近い(listen, season, often)
+        if(nx==="ə" && t[i+2]==="n" && ["s","z","f","v"].includes(x) && !wb.has(i+1) && (i+3===n || wb.has(i+3))){
+          out.push(C[x].u+"ン"); i += isV(t[i+3]) ? 2 : 3; continue;
+        }
+        const base = uv.has(i+1) ? "u" : V[nx][0]; let suf=suffix(nx,i+1); let kana;
         if(nx==="æ" && AE[x]){ kana=AE[x]; if(suf==="ァ") suf=""; } else kana=C[x][base];
         if(nx==="ə" && t[i+2]==="l" && (i+3===n || wb.has(i+3))){
           out.push(C[x].o+"ー"); i += isV(t[i+3]) ? 2 : 3; continue; }                  // apple → ポー, capable of → ケイパボーラヴ
@@ -5328,6 +5402,8 @@ WORD_DATA.forEach(r => { const e=makeEntry(r); if(!BY.has(e.key)){ DICT.push(e);
 /* AIで作った単語(このブラウザに保存) */
 const CKEY = "tsunagaru-tango-custom-v1";
 const GKEY = "tsunagaru-tango-gemini-v1";
+const PKEY = "tsunagaru-tango-phrases-v1";
+function savePhrases(){ try{ localStorage.setItem(PKEY, JSON.stringify(state.psets)); return true; }catch(e){ toast("フレーズを保存できませんでした"); return false; } }
 let CUSTOM = [];   // 行データの配列
 function addCustomEntry(r){
   const e = makeEntry(r); e.custom = true;
@@ -5351,19 +5427,22 @@ const courseCount = c => DICT.filter(e=>c.levels.some(([id])=>e.tags.includes(id
 const KEY = "tsunagaru-tango-v2";
 const state = { deck:{}, rate:1, tab:"study", filter:"todo", idx:0, flipped:false,
   q:"", course:"jhs", level:"jhs1", findShown:60,
-  apiKey:"", model:"", aiBusy:false, aiDraft:null, aiMsg:"", aiErr:false };
+  apiKey:"", model:"", aiBusy:false, aiDraft:null, aiMsg:"", aiErr:false,
+  pmode:"dict", dsrc:"deck", dq:null, dstats:{}, dlast:"",
+  psets:[], pInput:"", pBusy:false, pDraft:null, pMsg:"", pErr:false, pOpen:"" };
 function load(){
   loadCustom();
+  try{ const ps = JSON.parse(localStorage.getItem(PKEY)||"[]"); if(Array.isArray(ps)) state.psets = ps.filter(x=>x && Array.isArray(x.phrases)); }catch(e){}
   try{ const g = JSON.parse(localStorage.getItem(GKEY)||"{}"); state.apiKey = g.key||""; state.model = g.model||""; }catch(e){}
   try{
     const raw = localStorage.getItem(KEY);
-    if(raw){ const o = JSON.parse(raw); if(o && typeof o==="object"){ state.deck = o.deck && typeof o.deck==="object" ? o.deck : {}; if(o.rate===0.7||o.rate===1) state.rate=o.rate; if(o.course && COURSES.some(c=>c.id===o.course)){ state.course=o.course; const c=COURSES.find(c=>c.id===o.course); if(c.levels.some(([id])=>id===o.level)) state.level=o.level; } } }
+    if(raw){ const o = JSON.parse(raw); if(o && typeof o==="object"){ state.deck = o.deck && typeof o.deck==="object" ? o.deck : {}; if(o.rate===0.7||o.rate===1) state.rate=o.rate; if(o.dstats && typeof o.dstats==="object") state.dstats=o.dstats; if(["deck","all","phrases"].includes(o.dsrc)) state.dsrc=o.dsrc; if(o.course && COURSES.some(c=>c.id===o.course)){ state.course=o.course; const c=COURSES.find(c=>c.id===o.course); if(c.levels.some(([id])=>id===o.level)) state.level=o.level; } } }
   }catch(e){}
   for(const k of Object.keys(state.deck)) if(!BY.has(k)) delete state.deck[k];
 }
 let saveOk = true;
 function save(){
-  try{ localStorage.setItem(KEY, JSON.stringify({v:3, deck:state.deck, rate:state.rate, course:state.course, level:state.level})); saveOk = true; }
+  try{ localStorage.setItem(KEY, JSON.stringify({v:3, deck:state.deck, rate:state.rate, course:state.course, level:state.level, dstats:state.dstats, dsrc:state.dsrc})); saveOk = true; }
   catch(e){ if(saveOk) toast("記録を保存できませんでした(プライベートブラウズ中は保存されません)"); saveOk = false; }
 }
 const myWords = () => Object.entries(state.deck).sort((a,b)=>(a[1].t||0)-(b[1].t||0)).map(([k,v])=>Object.assign({}, BY.get(k), {learned:!!v.learned}));
@@ -5381,10 +5460,12 @@ function aiPrompt(word){
 - ipa: アメリカ英語の発音記号。スラッシュは付けない。次の記号だけを使う:
   æ ɑː ɑ ʌ ə ɚ ɝː ɪ iː i ʊ uː u e ɔː eɪ aɪ aʊ oʊ ɔɪ p b t t̬ d k ɡ f v θ ð s z ʃ ʒ tʃ dʒ h m n ŋ l r w j ˈ ˌ
   母音にはさまれて「ラ行」のように聞こえる t は t̬ と書く(water → ˈwɑːt̬ɚ)。熟語は単語の間に半角スペースを入れる。
+  弱く読む to は tə と書く。
 - katakana: 実際に聞こえる音に近いカタカナ(例: water → ワーラー)。
 - example: この語を使った短く自然な英文(5〜10語)。音のつながりが起きる部分を必ず含める。
 - exampleJa: 例文の自然な日本語訳。
 - exampleReading: 例文全体を、ネイティブが自然に話すときのつながった音でカタカナ表記。単語の間にスペースを入れない。
+  弱い to は、前が子音ならタ、前が母音や r ならラ(go to bed→ゴウラベッ)、前が n ならヌ(listen to me→リスンヌミー)。listen や lesson の語末はリスン・レスンのように書く。
 - links: 例文の中で音がつながる部分を1〜3個。part は example の中にそのまま含まれる文字列(大文字小文字も同じ)。reading はその部分のカタカナ。type は次のどれか:
   L=子音と母音がくっつく F=t/dがラ行になる D=語末の音を飲み込む N=nのあとのtが消える Y=youとくっついてチュ/ジュになる G=同じ音が1つになる H=hやthが消えてつながる W=to/for/and/ofなどが弱くなる`;
 }
@@ -5394,26 +5475,37 @@ const AI_SCHEMA = {type:"OBJECT", properties:{
   links:{type:"ARRAY", items:{type:"OBJECT", properties:{part:{type:"STRING"}, reading:{type:"STRING"}, type:{type:"STRING"}}, required:["part","reading","type"]}},
   error:{type:"STRING"}}, required:["word","pos","meaning","ipa","katakana","example","exampleJa","exampleReading","links"]};
 class AIError extends Error{ constructor(msg){ super(msg); } }
-async function callGemini(word){
+const sleep = ms => new Promise(r=>setTimeout(r,ms));
+async function callGemini(prompt, schema, onWait){
   const models = [...new Set([state.model, ...AI_MODELS_FALLBACK].filter(Boolean))];
   let lastErr = null;
   for(const model of models){
-    let res;
-    try{
-      res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
-        method:"POST", headers:{"Content-Type":"application/json","x-goog-api-key":state.apiKey},
-        body: JSON.stringify({contents:[{role:"user",parts:[{text:aiPrompt(word)}]}],
-          generationConfig:{temperature:0.3, responseMimeType:"application/json", responseSchema:AI_SCHEMA}})
-      });
-    }catch(e){ throw new AIError("通信できませんでした。電波の状態を確かめてください。"); }
-    if(res.status===404){ lastErr = new AIError(`モデル「${model}」が見つかりませんでした。`); continue; }
-    if(res.status===400 || res.status===401 || res.status===403) throw new AIError("APIキーが正しくないか、使えない状態です。設定画面でキーを確かめてください。");
-    if(res.status===429) throw new AIError("無料枠の回数上限に達しました。少し時間をおいてから試してください。");
-    if(!res.ok) throw new AIError(`AIからエラーが返りました(${res.status})。時間をおいて試してください。`);
-    const data = await res.json();
-    const text = ((data.candidates||[])[0]?.content?.parts||[]).map(p=>p.text||"").join("");
-    try{ return JSON.parse(text.replace(/```json|```/g,"").trim()); }
-    catch(e){ throw new AIError("AIの返事を読み取れませんでした。もう一度作成してください。"); }
+    for(let attempt=0; attempt<3; attempt++){
+      let res, data=null;
+      try{
+        res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
+          method:"POST", headers:{"Content-Type":"application/json","x-goog-api-key":state.apiKey},
+          body: JSON.stringify({contents:[{role:"user",parts:[{text:prompt}]}],
+            generationConfig:{temperature:0.4, responseMimeType:"application/json", responseSchema:schema}})
+        });
+      }catch(e){ throw new AIError("通信できませんでした。電波の状態を確かめてください。"); }
+      try{ data = await res.json(); }catch(e){ data=null; }
+      const gmsg = data && data.error && data.error.message ? `(Googleからの説明:${data.error.message})` : "";
+      if(res.ok){
+        const text = ((data&&data.candidates||[])[0]?.content?.parts||[]).map(p=>p.text||"").join("");
+        try{ return JSON.parse(text.replace(/```json|```/g,"").trim()); }
+        catch(e){ throw new AIError("AIの返事を読み取れませんでした。もう一度作成してください。"); }
+      }
+      if(res.status===404){ lastErr = new AIError(`モデル「${model}」が見つかりませんでした。${gmsg}`); break; }
+      if(res.status===400 || res.status===401 || res.status===403) throw new AIError("APIキーが正しくないか、使えない状態です。設定画面でキーを確かめてください。"+gmsg);
+      if(res.status===429) throw new AIError("無料枠の回数上限に達しました。少し時間をおいてから試してください。"+gmsg);
+      if(res.status===500 || res.status===503 || res.status===504){
+        lastErr = new AIError(`Googleのサーバーが混み合っています(${res.status})。時間をおいて試してください。${gmsg}`);
+        if(attempt<2){ const wait=(attempt+1)*2000; if(onWait) onWait(`AIが混み合っています。${wait/1000}秒待って再試行しています…(${model})`); await sleep(wait); continue; }
+        break;   // 次のモデルへ
+      }
+      throw new AIError(`AIからエラーが返りました(${res.status})。${gmsg}`);
+    }
   }
   throw lastErr || new AIError("使えるモデルが見つかりませんでした。設定画面でモデル名を確かめてください。");
 }
@@ -5434,7 +5526,7 @@ async function aiGenerate(word){
   if(!state.apiKey){ state.aiMsg="先に設定画面でAPIキーを登録してください。"; state.aiErr=true; renderFindArea(); return; }
   state.aiBusy=true; state.aiDraft=null; state.aiMsg=`AIが「${word}」のデータを作っています…`; state.aiErr=false; renderFindArea();
   try{
-    const row = aiToRow(await callGemini(word), word);
+    const row = aiToRow(await callGemini(aiPrompt(word), AI_SCHEMA, m=>{ state.aiMsg=m; renderFindArea(); }), word);
     const e = makeEntry(row); e.custom=true; e._row=row;
     if(BY.has(e.key)){ state.aiMsg=`「${e.word}」はすでに入っています。上の一覧から追加できます。`; state.aiErr=false; state.q=e.word; }
     else { state.aiDraft=e; state.aiMsg=""; }
@@ -5448,6 +5540,144 @@ function aiSaveDraft(){
   state.deck[e.key] = {learned:false, t:Date.now()}; save();
   state.aiDraft=null; state.aiMsg=`「${e.word}」を保存して単語帳に追加しました。「AIで追加」コースにも入っています。`; state.aiErr=false;
   renderFindArea();
+}
+
+/* ===== 練習:ディクテーション(黄色の部分を穴埋め) ===== */
+function phraseItems(){
+  const out=[];
+  state.psets.forEach(ps=>ps.phrases.forEach(ph=>out.push({word:ps.title, example:ph.en, exampleJa:ph.ja, exampleReading:ph.reading,
+    links:(ph.links||[]).map(l=>({part:l[0], reading:l[1], tip:TIPS[l[2]]||"", type:l[2]}))})));
+  return out;
+}
+function dictPool(){
+  const src = state.dsrc==="deck" ? myWords() : state.dsrc==="phrases" ? phraseItems() : DICT;
+  return src.filter(e=>e.example && e.links && e.links.some(l=>e.example.includes(l.part)));
+}
+function linkType(e,l){ if(l.type) return l.type; const r=(e._raw||null); return Object.keys(TIPS).find(k=>TIPS[k]===l.tip)||"L"; }
+function newDictQ(){
+  const pool = dictPool();
+  if(!pool.length){ state.dq=null; return; }
+  let e = pool[Math.floor(Math.random()*pool.length)];
+  if(pool.length>1 && e.example===state.dlast) e = pool[(pool.indexOf(e)+1)%pool.length];
+  state.dlast = e.example;
+  // 例文の中の位置で並べ、重なりを除く
+  const spans=[]; e.links.forEach(l=>{ const at=e.example.indexOf(l.part); if(at>=0 && !spans.some(s=>at<s.end && at+l.part.length>s.at)) spans.push({at, end:at+l.part.length, l, type:linkType(e,l)}); });
+  spans.sort((a,b)=>a.at-b.at);
+  state.dq = {e, spans, answers:spans.map(()=>""), checked:false, hint:false};
+  setTimeout(()=>speak(e.example), 300);
+}
+const norm = s => String(s||"").toLowerCase().replace(/[’‘]/g,"'").replace(/[^a-z0-9' ]/g," ").replace(/\s+/g," ").trim();
+function viewDict(){
+  const src = [["deck","単語帳"],["all","全単語"],["phrases","保存したフレーズ"]];
+  const head = `<div class="chips dsrc" role="group" aria-label="出題元">${src.map(([k,l])=>`<button type="button" class="chip" data-dsrc="${k}" aria-pressed="${state.dsrc===k}">${l}</button>`).join("")}</div>`;
+  if(!state.dq) newDictQ();
+  const q = state.dq;
+  if(!q) return head+`<div class="empty"><p>${state.dsrc==="deck"?"単語帳に単語を追加すると出題できます。":state.dsrc==="phrases"?"「場面別フレーズ」でフレーズを保存すると出題できます。":"出題できる例文がありません。"}</p></div>`;
+  const e=q.e; let html="", pos=0;
+  q.spans.forEach((sp,i)=>{
+    html += esc(e.example.slice(pos, sp.at));
+    const ok = q.checked && norm(q.answers[i])===norm(sp.l.part);
+    html += q.checked
+      ? `<span class="blank ${ok?"ok":"ng"}">${esc(q.answers[i]||"(空欄)")}</span>${ok?"":`<span class="ans">${esc(sp.l.part)}</span>`}`
+      : `<input class="blank" data-bi="${i}" value="${esc(q.answers[i])}" size="${Math.max(4, sp.l.part.length)}" autocomplete="off" autocapitalize="none" spellcheck="false" aria-label="空欄${i+1}">`;
+    pos = sp.end;
+  });
+  html += esc(e.example.slice(pos));
+  const nOk = q.checked ? q.spans.filter((sp,i)=>norm(q.answers[i])===norm(sp.l.part)).length : 0;
+  const st = state.dstats; const names={L:"くっつく",F:"ラ行化",D:"飲み込む",N:"tが消える",Y:"チュ・ジュ化",G:"1つにまとまる",H:"hが消える",W:"弱くなる"};
+  const statHtml = Object.keys(names).filter(k=>st[k]&&st[k].n).map(k=>`<span>${names[k]} ${st[k].ok}/${st[k].n}</span>`).join("");
+  return head+`<div class="dict">
+    <div class="row"><button type="button" class="play" data-say="${esc(e.example)}">${SPK}聞く</button><button type="button" class="play" data-sayslow="${esc(e.example)}">${SPK}ゆっくり</button></div>
+    <p class="sent">${html}</p>
+    ${q.hint && !q.checked ? `<p class="ja">ヒント(聞こえる音):${q.spans.map(sp=>esc(sp.l.reading)).join(" / ")}</p>`:""}
+    ${q.checked ? `<p class="res ${nOk===q.spans.length?"good":"bad"}">${nOk===q.spans.length?"全部正解!":`${q.spans.length}か所中 ${nOk}か所正解`}</p>
+      <div class="ex-reading">${esc(e.exampleReading)}</div><p class="ja">${esc(e.exampleJa)}</p>
+      <ul class="links">${q.spans.map(sp=>`<li><div class="body"><span class="lk">${esc(sp.l.part)}</span><span class="arrow">→</span><span class="lr">${esc(sp.l.reading)}</span>${sp.l.tip?`<span class="tip">${esc(sp.l.tip)}</span>`:""}</div><button type="button" class="icon" data-say="${esc(sp.l.part)}" aria-label="${esc(sp.l.part)} を聞く">${SPK}</button></li>`).join("")}</ul>`
+      : `<p class="ja">${esc(e.exampleJa)}</p>`}
+    <div class="judge">${q.checked
+      ? `<button type="button" data-dnext="1" class="yes" style="grid-column:1/-1">次の問題</button>`
+      : `<button type="button" id="dHint">ヒント</button><button type="button" class="yes" id="dCheck">答え合わせ</button>`}</div>
+    ${statHtml?`<div class="stats">${statHtml}</div>`:""}
+  </div>`;
+}
+function dictCheck(){
+  const q=state.dq; if(!q) return;
+  document.querySelectorAll(".blank[data-bi]").forEach(inp=>{ q.answers[+inp.dataset.bi]=inp.value; });
+  q.checked=true;
+  q.spans.forEach((sp,i)=>{ const k=sp.type||"L"; const s=state.dstats[k]||(state.dstats[k]={ok:0,n:0}); s.n++; if(norm(q.answers[i])===norm(sp.l.part)) s.ok++; });
+  save(); render();
+}
+
+/* ===== 練習:場面別フレーズ(AIで10個) ===== */
+const PRESETS = ["カフェでコーヒーを注文","オンラインゲーム中","空港のチェックイン","ホテルのフロント","道をたずねる","買い物・試着","レストランで注文","友だちと雑談","職場の会議","電話で予約"];
+function phrasePrompt(situation){
+  return `あなたはアメリカ英語の会話に詳しい英語教師です。日本人の学習者のために、場面「${situation}」でアメリカ人が実際によく使う自然な英語フレーズを10個作ってください。
+ルール:
+- title: 場面を表す短い日本語。
+- phrases は10個。それぞれ:
+  - en: 自然な英文(3〜12語)。教科書的すぎない、実際によく聞く言い方にする。
+  - ja: 自然な日本語訳。
+  - reading: ネイティブが自然に話すときの、音がつながった状態のカタカナ。単語の間にスペースを入れない。
+    弱い to は、前が子音ならタ、前が母音や r ならラ(go to bed→ゴウラベッ)、前が n ならヌ(listen to me→リスンヌミー)。
+  - links: 英文の中で音が変化する部分を1〜3個。part は en の中にそのまま含まれる文字列(大文字小文字も同じ)。reading はその部分のカタカナ。type は次のどれか:
+    L=子音と母音がくっつく F=母音にはさまれたtがラ行になる D=破裂音(t d k p b g)のあとに子音が来て飲み込まれる N=nのあとのtが消える Y=youやyourとくっついてチュ/ジュになる G=同じ音が続いて1つになる H=弱いh(him her hisなど)が消えてつながる W=to/for/and/ofなどが弱くなる
+  - note: その場面での使い方のひと言(日本語、20字以内)。
+- 場面として不適切・意味不明な場合は error に日本語で理由を書く。`;
+}
+const PHRASE_SCHEMA = {type:"OBJECT", properties:{title:{type:"STRING"}, error:{type:"STRING"},
+  phrases:{type:"ARRAY", items:{type:"OBJECT", properties:{en:{type:"STRING"}, ja:{type:"STRING"}, reading:{type:"STRING"}, note:{type:"STRING"},
+    links:{type:"ARRAY", items:{type:"OBJECT", properties:{part:{type:"STRING"}, reading:{type:"STRING"}, type:{type:"STRING"}}, required:["part","reading","type"]}}},
+    required:["en","ja","reading","links"]}}}, required:["title","phrases"]};
+async function phraseGenerate(){
+  const sit = state.pInput.trim();
+  if(!sit){ state.pMsg="場面を入力するか、下の例から選んでください。"; state.pErr=true; render(); return; }
+  if(!state.apiKey){ state.pMsg="先に設定画面でAPIキーを登録してください。"; state.pErr=true; render(); return; }
+  state.pBusy=true; state.pDraft=null; state.pMsg=`AIが「${sit}」のフレーズを作っています…`; state.pErr=false; render();
+  try{
+    const o = await callGemini(phrasePrompt(sit), PHRASE_SCHEMA, m=>{ state.pMsg=m; render(); });
+    const s = v => typeof v==="string" ? v.trim() : "";
+    if(s(o.error)) throw new AIError(s(o.error));
+    const phrases = (Array.isArray(o.phrases)?o.phrases:[]).map(p=>{ const en=s(p&&p.en);
+      return {en, ja:s(p&&p.ja), reading:s(p&&p.reading).replace(/\s+/g,""), note:s(p&&p.note),
+        links:(Array.isArray(p&&p.links)?p.links:[]).map(l=>[s(l&&l.part), s(l&&l.reading), s(l&&l.type).toUpperCase().slice(0,1)]).filter(l=>l[0]&&l[1]&&TIPS[l[2]]&&en.includes(l[0])).slice(0,3)};
+    }).filter(p=>p.en && p.ja).slice(0,10);
+    if(!phrases.length) throw new AIError("フレーズを作れませんでした。場面の書き方を変えて試してください。");
+    state.pDraft = {id:"p"+Date.now().toString(36), title:s(o.title)||sit, situation:sit, t:Date.now(), phrases};
+    state.pMsg="";
+  }catch(err){ state.pMsg = err instanceof AIError ? err.message : "作成できませんでした。もう一度試してください。"; state.pErr=true; }
+  finally{ state.pBusy=false; render(); }
+}
+function phraseList(set){
+  return `<ul class="phr">${set.phrases.map(p=>`<li>
+    <div class="row" style="margin:0 0 4px"><button type="button" class="play" data-say="${esc(p.en)}">${SPK}聞く</button><button type="button" class="play" data-sayslow="${esc(p.en)}">${SPK}ゆっくり</button></div>
+    <p class="en">${highlight(p.en, p.links.map(l=>({part:l[0]})))}</p>
+    <div class="rd">${esc(p.reading)}</div><p class="ja">${esc(p.ja)}${p.note?` <span style="color:var(--blue)">(${esc(p.note)})</span>`:""}</p>
+    ${p.links.map(l=>`<p class="tp"><b>${esc(l[0])} → ${esc(l[1])}</b> ${esc(TIPS[l[2]]||"")}</p>`).join("")}
+  </li>`).join("")}</ul>`;
+}
+function viewPhrases(){
+  const open = state.psets.find(x=>x.id===state.pOpen);
+  if(open) return `<div class="bar"><button type="button" class="ghost" id="pBack">‹ 一覧にもどる</button><span class="count">${open.phrases.length}フレーズ</span></div>
+    <h2 style="margin:4px 0 0">${esc(open.title)}</h2>${phraseList(open)}`;
+  return `<div class="panel" style="margin-top:0">
+    <h2>場面を入れてAIでフレーズを作る</h2>
+    <input type="text" class="field" id="pIn" value="${esc(state.pInput)}" placeholder="例:カフェでコーヒーを注文" autocomplete="off" aria-label="場面">
+    <div class="presets">${PRESETS.map(p=>`<button type="button" class="chip" data-preset="${esc(p)}">${esc(p)}</button>`).join("")}</div>
+    <div class="btns"><button type="button" class="primary" id="pGen" ${state.pBusy?"disabled":""}>AIで10フレーズ作成</button></div>
+    ${state.apiKey?"":`<p style="margin-top:10px">AI機能を使うには、設定画面でAPIキーを登録してください。</p>`}
+    ${state.pMsg?`<p class="${state.pErr?"err":""}" style="margin-top:10px;${state.pErr?"color:var(--danger)":""}">${esc(state.pMsg)}</p>`:""}
+  </div>
+  ${state.pDraft?`<div class="ai-box"><p><b>${esc(state.pDraft.title)}</b>(内容を確かめてから保存してください)</p>${phraseList(state.pDraft)}
+    <div class="btns" style="margin-top:10px"><button type="button" class="primary" id="pSave">保存する</button><button type="button" class="ghost" id="pRetry">作り直す</button><button type="button" class="ghost" id="pCancel">やめる</button></div></div>`:""}
+  <h2 style="margin:18px 0 8px">保存した場面</h2>
+  ${state.psets.length?`<ul class="setlist">${state.psets.slice().reverse().map(x=>`<li><div class="nm"><b>${esc(x.title)}</b><span>${x.phrases.length}フレーズ</span></div>
+    <button type="button" class="add" data-popen="${x.id}">開く</button>
+    <button type="button" class="icon" data-pdel="${x.id}" aria-label="${esc(x.title)} を削除"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button></li>`).join("")}</ul>`
+    :`<div class="empty" style="margin-top:0"><p>まだありません。保存したフレーズは、ディクテーションの出題にも使えます。</p></div>`}`;
+}
+function viewPractice(){
+  return `<div class="seg" role="group" aria-label="練習の種類"><button type="button" data-pmode="dict" aria-pressed="${state.pmode==="dict"}">ディクテーション</button><button type="button" data-pmode="phrase" aria-pressed="${state.pmode==="phrase"}">場面別フレーズ</button></div>
+  ${state.pmode==="dict"?viewDict():viewPhrases()}`;
 }
 
 /* ===== helpers ===== */
@@ -5659,7 +5889,8 @@ function viewSettings(){
       <li><b>チュ・ジュになる(meet you → ミーチュー)</b>${TIPS.Y}</li>
       <li><b>1つにまとまる(need to → ニーッタ)</b>${TIPS.G}</li>
       <li><b>h が消える(tell him → テリム)</b>${TIPS.H}</li>
-      <li><b>小さい単語が弱くなる(go to → ゴウタ)</b>${TIPS.W}</li>
+      <li><b>小さい単語が弱くなる(have to → ハフタ)</b>${TIPS.W}</li>
+      <li><b>「to」の聞こえ方</b>前が子音ならタ(need to →ニーッタ)、母音や r ならラ(go to bed →ゴウラベッ)、n ならヌ(listen to me →リスンヌミー)に近くなります。</li>
     </ul></div>
   <div class="panel"><h2>記録のバックアップ</h2>
     <p>単語帳と「覚えた/まだ」の記録は、このスマホのこのブラウザの中にだけ保存されています。ブラウザのデータを消す前や機種変更の前に、ファイルに書き出しておくと元に戻せます。</p>
@@ -5674,7 +5905,9 @@ function viewSettings(){
 function render(){
   document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-current", b.dataset.tab===state.tab?"page":"false"));
   document.querySelectorAll(".speed button").forEach(b=>b.setAttribute("aria-pressed", String(Number(b.dataset.rate)===state.rate)));
-  $view.innerHTML = state.tab==="study"?viewStudy():state.tab==="find"?viewFind():state.tab==="mine"?viewMine():viewSettings();
+  $view.innerHTML = state.tab==="study"?viewStudy():state.tab==="find"?viewFind():state.tab==="mine"?viewMine():state.tab==="practice"?viewPractice():viewSettings();
+  if(state.tab==="practice" && state.pmode==="phrase"){ const pi=document.getElementById("pIn"); if(pi) pi.addEventListener("input",e=>{ state.pInput=e.target.value; }); }
+  if(state.tab==="practice" && state.pmode==="dict"){ document.querySelectorAll(".blank[data-bi]").forEach(inp=>{ inp.addEventListener("input",()=>{ if(state.dq) state.dq.answers[+inp.dataset.bi]=inp.value; }); inp.addEventListener("keydown",ev=>{ if(ev.key==="Enter"&&!ev.isComposing){ ev.preventDefault(); dictCheck(); } }); }); }
   if(state.tab==="find"){
     const q=document.getElementById("q");
     const upd=()=>{ state.q=q.value; state.findShown=60; if(!state.aiBusy && !state.aiDraft){ state.aiMsg=""; } renderFindArea(); };
@@ -5691,7 +5924,7 @@ function refreshAddButtons(){
 
 /* ===== backup ===== */
 function exportData(){
-  const data = JSON.stringify({app:"tsunagaru-tango", v:3, exportedAt:new Date().toISOString(), deck:state.deck, custom:CUSTOM}, null, 1);
+  const data = JSON.stringify({app:"tsunagaru-tango", v:3, exportedAt:new Date().toISOString(), deck:state.deck, custom:CUSTOM, phrases:state.psets}, null, 1);
   const name = "tango-backup-"+new Date().toISOString().slice(0,10)+".json";
   try{
     const file = new File([data], name, {type:"application/json"});
@@ -5712,6 +5945,7 @@ function importData(file){
       let nc=0;
       if(Array.isArray(o.custom)) for(const r of o.custom){ if(Array.isArray(r) && typeof r[0]==="string" && !BY.has(r[0].toLowerCase())){ if(addCustomEntry(r)){ CUSTOM.push(r); nc++; } } }
       if(nc) saveCustom();
+      if(Array.isArray(o.phrases)){ const have=new Set(state.psets.map(x=>x.id)); o.phrases.forEach(x=>{ if(x && Array.isArray(x.phrases) && !have.has(x.id)) state.psets.push(x); }); savePhrases(); }
       let n=0; const next={};
       for(const [k,v] of Object.entries(o.deck)){ if(BY.has(k)){ next[k]={learned:!!(v&&v.learned), t:(v&&v.t)||Date.now()}; n++; } }
       if(!confirm(`${n}語の記録を読み込みます。今の単語帳は置きかわります。よろしいですか?`)) return;
@@ -5727,6 +5961,20 @@ document.addEventListener("click", e=>{
   if(e.target.closest(".ipa-how")) return;
   const t = e.target.closest("button,#card"); if(!t) return;
   if(t.dataset.say!==undefined){ e.preventDefault(); e.stopPropagation(); speak(t.dataset.say); return; }
+  if(t.dataset.sayslow!==undefined){ e.preventDefault(); const r=state.rate; state.rate=0.7; speak(t.dataset.sayslow); state.rate=r; return; }
+  if(t.dataset.pmode){ state.pmode=t.dataset.pmode; render(); return; }
+  if(t.dataset.dsrc){ state.dsrc=t.dataset.dsrc; state.dq=null; save(); render(); return; }
+  if(t.dataset.dnext){ state.dq=null; render(); return; }
+  if(t.id==="dCheck"){ dictCheck(); return; }
+  if(t.id==="dHint"){ if(state.dq){ document.querySelectorAll(".blank[data-bi]").forEach(inp=>{ state.dq.answers[+inp.dataset.bi]=inp.value; }); state.dq.hint=true; render(); } return; }
+  if(t.dataset.preset){ state.pInput=t.dataset.preset; render(); return; }
+  if(t.id==="pGen"){ const pi=document.getElementById("pIn"); if(pi) state.pInput=pi.value; phraseGenerate(); return; }
+  if(t.id==="pRetry"){ phraseGenerate(); return; }
+  if(t.id==="pCancel"){ state.pDraft=null; state.pMsg=""; render(); return; }
+  if(t.id==="pSave"){ if(!state.pDraft) return; state.psets.push(state.pDraft); if(!savePhrases()){ state.psets.pop(); return; } state.pDraft=null; state.pMsg="保存しました。ディクテーションの「保存したフレーズ」でも出題されます。"; state.pErr=false; render(); return; }
+  if(t.dataset.popen){ state.pOpen=t.dataset.popen; render(); window.scrollTo(0,0); return; }
+  if(t.id==="pBack"){ state.pOpen=""; render(); return; }
+  if(t.dataset.pdel){ const x=state.psets.find(v=>v.id===t.dataset.pdel); if(!x) return; if(!confirm(`「${x.title}」を削除しますか?`)) return; state.psets=state.psets.filter(v=>v.id!==x.id); savePhrases(); render(); toast("削除しました"); return; }
   if(t.dataset.add!==undefined){ e.preventDefault(); e.stopPropagation();
     const k=t.dataset.add; if(state.deck[k]) return; state.deck[k]={learned:false,t:Date.now()}; save(); refreshAddButtons(); toast(`「${BY.get(k).word}」を追加しました`); return; }
   if(t.dataset.tab){ state.tab=t.dataset.tab; state.flipped=false; render(); window.scrollTo(0,0); return; }
