@@ -5433,7 +5433,7 @@ const state = { deck:{}, rate:1, tab:"study", filter:"todo", idx:0, flipped:fals
 function load(){
   loadCustom();
   try{ const ps = JSON.parse(localStorage.getItem(PKEY)||"[]"); if(Array.isArray(ps)) state.psets = ps.filter(x=>x && Array.isArray(x.phrases)); }catch(e){}
-  try{ const g = JSON.parse(localStorage.getItem(GKEY)||"{}"); state.apiKey = g.key||""; state.model = g.model||""; }catch(e){}
+  try{ const g = JSON.parse(localStorage.getItem(GKEY)||"{}"); state.apiKey = g.key||""; state.model = g.model||""; state.okModel = g.okModel||""; }catch(e){}
   try{
     const raw = localStorage.getItem(KEY);
     if(raw){ const o = JSON.parse(raw); if(o && typeof o==="object"){ state.deck = o.deck && typeof o.deck==="object" ? o.deck : {}; if(o.rate===0.7||o.rate===1) state.rate=o.rate; if(o.dstats && typeof o.dstats==="object") state.dstats=o.dstats; if(["deck","all","phrases"].includes(o.dsrc)) state.dsrc=o.dsrc; if(o.course && COURSES.some(c=>c.id===o.course)){ state.course=o.course; const c=COURSES.find(c=>c.id===o.course); if(c.levels.some(([id])=>id===o.level)) state.level=o.level; } } }
@@ -5449,7 +5449,8 @@ const myWords = () => Object.entries(state.deck).sort((a,b)=>(a[1].t||0)-(b[1].t
 const deckList = () => state.filter==="todo" ? myWords().filter(w=>!w.learned) : myWords();
 
 /* ===== AI(Gemini)で単語データを作る ===== */
-const AI_MODELS_FALLBACK = ["gemini-flash-latest","gemini-3.5-flash","gemini-2.5-flash"];
+// 無料枠が使えるモデルを先に試す。上限に達したモデルは飛ばして次へ(上限はモデルごとに別)
+const AI_MODELS_FALLBACK = ["gemini-2.5-flash","gemini-2.5-flash-lite","gemini-flash-latest","gemini-flash-lite-latest"];
 function aiPrompt(word){
   return `あなたはアメリカ英語の発音に詳しい英語教師です。日本人の学習者向けに、英単語または熟語「${word}」の学習データを作ってください。
 
@@ -5477,8 +5478,8 @@ const AI_SCHEMA = {type:"OBJECT", properties:{
 class AIError extends Error{ constructor(msg){ super(msg); } }
 const sleep = ms => new Promise(r=>setTimeout(r,ms));
 async function callGemini(prompt, schema, onWait){
-  const models = [...new Set([state.model, ...AI_MODELS_FALLBACK].filter(Boolean))];
-  let lastErr = null;
+  const models = [...new Set([state.model, state.okModel, ...AI_MODELS_FALLBACK].filter(Boolean))];
+  let lastErr = null, quotaErr = null;
   for(const model of models){
     for(let attempt=0; attempt<3; attempt++){
       let res, data=null;
@@ -5492,13 +5493,23 @@ async function callGemini(prompt, schema, onWait){
       try{ data = await res.json(); }catch(e){ data=null; }
       const gmsg = data && data.error && data.error.message ? `(Googleからの説明:${data.error.message})` : "";
       if(res.ok){
+        if(state.okModel!==model){ state.okModel=model; try{ localStorage.setItem(GKEY, JSON.stringify({key:state.apiKey, model:state.model, okModel:model})); }catch(e){} }
         const text = ((data&&data.candidates||[])[0]?.content?.parts||[]).map(p=>p.text||"").join("");
         try{ return JSON.parse(text.replace(/```json|```/g,"").trim()); }
         catch(e){ throw new AIError("AIの返事を読み取れませんでした。もう一度作成してください。"); }
       }
       if(res.status===404){ lastErr = new AIError(`モデル「${model}」が見つかりませんでした。${gmsg}`); break; }
       if(res.status===400 || res.status===401 || res.status===403) throw new AIError("APIキーが正しくないか、使えない状態です。設定画面でキーを確かめてください。"+gmsg);
-      if(res.status===429) throw new AIError("無料枠の回数上限に達しました。少し時間をおいてから試してください。"+gmsg);
+      if(res.status===429){
+        const raw = (data && data.error && data.error.message) || "";
+        const m = raw.match(/retry in ([\d.]+)s/i);
+        const zero = /limit:\s*0\b/.test(raw);
+        quotaErr = new AIError(`無料枠の回数上限に達しました(${model})。少し時間をおいてから試してください。${gmsg}`);
+        // 数秒待てば回復する「1分あたり」の上限なら1回だけ待って再試行
+        if(!zero && m && +m[1]<=20 && attempt===0){ if(onWait) onWait(`回数制限のため${Math.ceil(+m[1])}秒待って再試行しています…(${model})`); await sleep(Math.ceil(+m[1])*1000); continue; }
+        if(onWait) onWait(`「${model}」は上限に達しているため、別のモデルで試しています…`);
+        break;   // 別のモデルへ(上限はモデルごと)
+      }
       if(res.status===500 || res.status===503 || res.status===504){
         lastErr = new AIError(`Googleのサーバーが混み合っています(${res.status})。時間をおいて試してください。${gmsg}`);
         if(attempt<2){ const wait=(attempt+1)*2000; if(onWait) onWait(`AIが混み合っています。${wait/1000}秒待って再試行しています…(${model})`); await sleep(wait); continue; }
@@ -5507,7 +5518,7 @@ async function callGemini(prompt, schema, onWait){
       throw new AIError(`AIからエラーが返りました(${res.status})。${gmsg}`);
     }
   }
-  throw lastErr || new AIError("使えるモデルが見つかりませんでした。設定画面でモデル名を確かめてください。");
+  throw quotaErr || lastErr || new AIError("使えるモデルが見つかりませんでした。設定画面でモデル名を確かめてください。");
 }
 function aiToRow(o, asked){
   const s = v => typeof v==="string" ? v.trim() : "";
@@ -5865,7 +5876,8 @@ function viewSettings(){
       <li>AIの内容はまちがうことがあります。音声で発音を確かめてから保存してください。</li>
     </ul>
     <input type="password" class="field" id="apiKeyIn" placeholder="${k?"登録済み(変更するときだけ入力)":"APIキーを貼り付け"}" autocomplete="off" autocapitalize="none" spellcheck="false" aria-label="APIキー">
-    <input type="text" class="field" id="modelIn" value="${esc(state.model)}" placeholder="モデル名(空欄なら自動)" autocomplete="off" autocapitalize="none" spellcheck="false" aria-label="モデル名">
+    ${state.okModel?`<p style="margin:0 0 8px">前回うまく動いたモデル:<b>${esc(state.okModel)}</b></p>`:""}
+    <input type="text" class="field" id="modelIn" value="${esc(state.model)}" placeholder="モデル名(空欄なら自動で選ぶ)" autocomplete="off" autocapitalize="none" spellcheck="false" aria-label="モデル名">
     <div class="btns"><button type="button" class="primary" id="aiKeySave">保存する</button>${k?`<button type="button" class="ghost danger" id="aiKeyDel">キーを削除</button>`:""}</div>
   </div>
   <div class="panel"><h2>カタカナの読み方</h2>
@@ -6014,7 +6026,7 @@ document.addEventListener("click", e=>{
   if(t.id==="aiKeySave"){
     const kv=document.getElementById("apiKeyIn").value.trim(), mv=document.getElementById("modelIn").value.trim();
     if(kv) state.apiKey=kv; state.model=mv;
-    try{ localStorage.setItem(GKEY, JSON.stringify({key:state.apiKey, model:state.model})); toast(state.apiKey?"保存しました":"モデル名を保存しました"); }catch(err){ toast("保存できませんでした"); }
+    try{ localStorage.setItem(GKEY, JSON.stringify({key:state.apiKey, model:state.model, okModel:state.okModel})); toast(state.apiKey?"保存しました":"モデル名を保存しました"); }catch(err){ toast("保存できませんでした"); }
     render(); return; }
   if(t.id==="aiKeyDel"){ if(!confirm("APIキーを削除しますか?")) return; state.apiKey="";
     try{ localStorage.setItem(GKEY, JSON.stringify({key:"", model:state.model})); }catch(err){} render(); toast("削除しました"); return; }
